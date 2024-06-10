@@ -1,0 +1,11 @@
+#register-container{
+    width: 600px;
+    border: solid;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-width: 2px;
+    border-radius: 5px;
+    margin-top: 108px;
+}
+#register-form{
+    border: none;
+}

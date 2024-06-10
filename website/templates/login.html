@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block title %}Login{% endblock %}
+
+{% block content %}
+<div id="login-register-buttons">
+    <a href="/influencer-register" type="button" class="btn btn-primary" id="influencer-register">Influencer Register</a>
+    <a href="/sponsor-register" type="button" class="btn btn-primary" id="sponsor-register">Sponsor Register</a>
+  </div>
+<div class="container mt-3" align="center" id="login-container">
+
+  {# login input form #}
+  <form method="POST" class="form-control" disabled id="login-form">
+      <h2 align="center">Login</h2> <br>
+
+      <div class="form-floating mb-4">
+        <input type="email" id="email" name="email" placeholder="Enter Email" class="form-control">
+        <label for="email">Email : </label>
+      </div>
+      
+      <div class="form-floating mb-3">
+        <input type="password" id="password" name="password" placeholder="Enter Password" class="form-control">
+        <label type="password">Password : </label>
+      </div>
+        <button class="btn btn-primary" type="submit" id="login" style="width: 140px;">Login</button>
+  </form>
+</div>
+{% endblock  %}
