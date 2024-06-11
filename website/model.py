@@ -19,9 +19,10 @@ class Influencers(db.Model, UserMixin):
     category = db.Column(db.String(100), nullable=False)
     niche = db.Column(db.String(100), nullable=False)
     followers = db.Column(db.Integer, nullable=False)
-    reach = db.Column(db.Integer, nullable=False)
-    ad_requests = db.relationship("Ad_request", backref="influencers")
+    reach = db.Column(db.Integer)
+    platform_preference = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
+    ad_requests = db.relationship("Ad_request", backref="influencers")
 
 class Ad_request(db.Model, UserMixin):
     __tablename__ = "ad_request"

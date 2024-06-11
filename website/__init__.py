@@ -15,9 +15,11 @@ def create_app():
 
     # import modules
     from .auth import auth
+    from .views import views
 
     # registering blueprints
     app.register_blueprint(auth, url_prefix="/")
+    app.register_blueprint(views, url_prefix="/")
 
     # setting up database
     from .model import Ad_request, Campaigns, Sponsors, Influencers
