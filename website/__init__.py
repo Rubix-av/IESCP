@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from os import path
 
 db = SQLAlchemy()
@@ -12,18 +13,32 @@ def create_app():
     db.init_app(app)
 
     # initializing logging variables
+    login_manager = LoginManager()
+    login_manager.login_view = "auth.login"
+    login_manager.init_app(app)
 
     # import modules
-    from .auth import auth
     from .views import views
+    from .auth import auth
 
     # registering blueprints
-    app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(auth, url_prefix="/auth")
 
     # setting up database
     from .model import Ad_request, Campaigns, Sponsors, Influencers
     create_database(app)
+
+    # user loader for login manager
+    @login_manager.user_loader
+    def load_user(user_id):
+        if user_id.startswith('sponsor-'):
+            user_id = user_id.replace('sponsor-', '')
+            return Sponsors.query.get(int(user_id))
+        elif user_id.startswith('influencer-'):
+            user_id = user_id.replace('influencer-', '')
+            return Influencers.query.get(int(user_id))
+        return None
 
     return app
 

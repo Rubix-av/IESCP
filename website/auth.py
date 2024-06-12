@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask_login import login_user, login_required, logout_user, current_user
 from .model import db, Sponsors, Influencers
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -16,6 +17,7 @@ def login():
 
         if sponsor:
             if check_password_hash(sponsor.password, password):
+                login_user(sponsor, remember=True)
                 flash("Login successfull!", category='success')
                 return redirect(url_for("views.sponsor_profile"))
             else:
@@ -23,6 +25,7 @@ def login():
                 return redirect(url_for("auth.login"))
         if influencer:
             if check_password_hash(influencer.password, password):
+                login_user(influencer, remember=True)
                 flash("Login successfull!", category='success')
                 return redirect(url_for("views.influencer_profile"))
             else:
@@ -33,7 +36,7 @@ def login():
             return redirect(url_for("auth.login"))
 
 
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 # ==============Sponsor Register==============
 @auth.route("/sponsor-register", methods=["GET","POST"])
@@ -62,6 +65,7 @@ def sponsor_register():
             db.session.add(new_sponsor)
             db.session.commit()
 
+            login_user(new_sponsor, remember=True)
             flash("User created successfully", category='success')
             return redirect(url_for("views.sponsor_profile"))
             
@@ -94,7 +98,16 @@ def influencer_register():
             db.session.add(new_influencer)
             db.session.commit()
 
+            login_user(new_influencer, remember=True)
             flash("Influencer created successfully", category='success')
             return redirect(url_for("views.influencer_profile"))
         
     return render_template("influencer/influencer-register.html")
+
+# ==============Logout User==============
+@auth.route("logout")
+@login_required
+def logout():
+    logout_user()
+    flash("Logged out successfully", category='success')
+    return redirect(url_for("auth.login"))

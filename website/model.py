@@ -11,6 +11,9 @@ class Sponsors(db.Model, UserMixin):
     budget = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(50), nullable=False)
 
+    def get_id(self):
+        return f"sponsor-{self.id}"
+
 class Influencers(db.Model, UserMixin):
     __tablename__ = "influencers"
 
@@ -23,6 +26,9 @@ class Influencers(db.Model, UserMixin):
     platform_preference = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     ad_requests = db.relationship("Ad_request", backref="influencers")
+
+    def get_id(self):
+        return f"influencer-{self.id}"
 
 class Ad_request(db.Model, UserMixin):
     __tablename__ = "ad_request"
