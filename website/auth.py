@@ -8,6 +8,10 @@ auth = Blueprint("auth", __name__)
 # ==============User Login==============
 @auth.route("/login", methods=["GET","POST"])
 def login():
+    if current_user.is_authenticated:
+        flash("You are already logged in!", category='error')
+        return redirect(url_for("views.sponsor_profile"))
+    
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -41,6 +45,10 @@ def login():
 # ==============Sponsor Register==============
 @auth.route("/sponsor-register", methods=["GET","POST"])
 def sponsor_register():
+    if current_user.is_authenticated:
+        flash("You are already logged in!", category='error')
+        return redirect(url_for("views.sponsor_profile"))
+    
     if request.method == "POST":
         username = request.form.get("username")
         industry = request.form.get("industry")
@@ -75,6 +83,10 @@ def sponsor_register():
 # ==============Influencer Register==============
 @auth.route("/influencer-register", methods=["GET","POST"])
 def influencer_register():
+    if current_user.is_authenticated:
+        flash("You are already logged in!", category='error')
+        return redirect(url_for("views.influencer_profile"))
+    
     if request.method == "POST":
         username = request.form.get("username")
         category = request.form.get("category")
