@@ -5,7 +5,8 @@ from sqlalchemy import Date
 class Sponsors(db.Model, UserMixin):
     __tablename__ = "sponsors"
 
-    id = db.Column(db.Integer, primary_key=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     industry = db.Column(db.String(150), nullable=False)
     budget = db.Column(db.Integer, nullable=False)
@@ -18,6 +19,7 @@ class Influencers(db.Model, UserMixin):
     __tablename__ = "influencers"
 
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
     niche = db.Column(db.String(100), nullable=False)
