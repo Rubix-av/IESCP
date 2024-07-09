@@ -79,7 +79,7 @@ def sponsor_register():
             return redirect(url_for("views.sponsor_profile"))
             
 
-    return render_template("sponsor/sponsor-register.html")
+    return render_template("sponsor/sponsor-register.html", user=current_user)
 
 # Influencer Register
 @auth.route("/influencer-register", methods=["GET","POST"])
@@ -116,7 +116,7 @@ def influencer_register():
             flash("Influencer created successfully", category='success')
             return redirect(url_for("views.influencer_profile"))
         
-    return render_template("influencer/influencer-register.html")
+    return render_template("influencer/influencer-register.html", user=current_user)
 
 # Logout User
 @auth.route("logout")

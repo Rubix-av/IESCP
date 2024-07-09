@@ -47,11 +47,10 @@ class Campaigns(db.Model, UserMixin):
     __tablename__ = "campaigns"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200), nullable=False)
     start_date = db.Column(Date, nullable=False)
     end_date = db.Column(Date, nullable=False)
     budget = db.Column(db.Integer, nullable=False)
     visibility = db.Column(db.String(50), default="Public", nullable=False)
-    goals = db.Column(db.String(100), nullable=False)
     ad_requests = db.relationship("Ad_request", backref="campaigns")

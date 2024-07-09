@@ -1,7 +1,41 @@
-{% extends "base.html" %} {% block title %}Campaigns{% endblock %}
+{% extends "view.html" %} {% block title %}Campaigns{% endblock %}
 
-{% block content %}
-<h1>This is Sponsor Campaigns</h1>
+{% block view_content %}
+<h1 align="center" style="padding: 20px 10px">Sponsor Campaigns</h1>
+
+{% if allCampaigns|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>Start Adding Campaigns</strong></span>
+    </div>
+  {% else %}
+    <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Budget</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for campaign in allCampaigns %}
+        <tr>
+          <th scope="row">{{loop.index}}</th>
+          <td>{{campaign.title}}</td>
+          <td>{{campaign.description}}</td>
+          <td>{{campaign.budget}}</td>
+          <td>{{campaign.start_date}}</td>
+          <td>{{campaign.end_date}}</td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+    </table>
+  {% endif %}
+
 
 <a href="add-campaign" class="btn btn-primary">Add New Campaign</a>
 {% endblock %}

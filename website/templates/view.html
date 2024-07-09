@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding-bottom: 5rem;">
+  {% block view_content %}
+  {% endblock %}
+</div>
+
+<style>
+  .table-bordered {
+    border: 2px solid;
+    /* Blue border */
+    border-radius: 80px !important;
+    /* Rounded corners */
+  }
+
+  .table-bordered td {
+    padding: 10px;
+    /* Add padding inside the cells */
+  }
+</style>
+
+{% if user.is_authenticated %}
+<div class="container-fluid mt-5 fixed-bottom flex-grow-1" style="margin-top: auto;">
+  <table class="table-bordered border-secondary" align="center">
+    <tbody>
+      <tr>
+        <td>Logged in as <strong>{{user.email}}</strong></td>
+        <td><a class="btn btn-danger" href="/logout">Logout</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}
