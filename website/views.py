@@ -14,7 +14,9 @@ def sponsor_profile():
 @views.route("/sponsor-campaigns")
 @login_required
 def sponsor_campaigns():
-    return render_template("sponsor/sponsor-campaigns.html", user=current_user)
+    allCampaigns = Campaigns.query.all()
+
+    return render_template("sponsor/sponsor-campaigns.html", user=current_user, allCampaigns=allCampaigns)
 
 @views.route("/sponsor-find")
 @login_required
