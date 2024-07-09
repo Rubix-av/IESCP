@@ -18,11 +18,13 @@ def create_app():
     login_manager.init_app(app)
 
     # import modules
-    from .views import views
+    from .sponsors import sponsor
+    from .influencers import influencer
     from .auth import auth
 
     # registering blueprints
-    app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(sponsor, url_prefix="/sponsor")
+    app.register_blueprint(influencer, url_prefix="/influencer")
     app.register_blueprint(auth, url_prefix="/auth")
 
     # setting up database
