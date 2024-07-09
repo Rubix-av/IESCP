@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
 from .model import db, Campaigns
 from datetime import datetime
@@ -51,7 +51,17 @@ def add_campaign():
         db.session.add(new_campaign)
         db.session.commit()
 
-        return redirect(url_for("views.sponsor_campaigns"))
+        return redirect(url_for("sponsor.sponsor_campaigns"))
 
     return render_template("sponsor_pages/add-campaign.html", user=current_user)
 
+@sponsor.route("delete-campaign/<int:id>")
+@login_required
+def delete_campaign(id):
+    if request.method == "GET":
+        campaign = Campaigns.query.filter_by(id=id).first()    
+        db.session.delete(campaign)
+        db.session.commit()
+
+        flash("Campaign deleted successfully", category='success')
+        return redirect(url_for("sponsor.sponsor_campaigns"))
