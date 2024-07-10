@@ -34,8 +34,8 @@ def create_app():
     create_database(app)
 
     # API end points
-    # from .api import Campaigns
-    # api.add_resource(Campaigns, "/api/campaign/<int:id>")
+    from .api import Campaigns_API
+    api.add_resource(Campaigns_API, "/api/campaign/<int:id>", "/api/campaign")
 
     # user loader for login manager
     @login_manager.user_loader

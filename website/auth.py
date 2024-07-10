@@ -10,7 +10,7 @@ auth = Blueprint("auth", __name__)
 def login():
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
-        return redirect(url_for("sponsors.sponsor_profile"))
+        return redirect(url_for("sponsor.sponsor_profile"))
     
     if request.method == "POST":
         email = request.form.get("email")
