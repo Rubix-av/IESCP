@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
-from .model import db
+from .model import db, Campaigns
 import requests
 from datetime import datetime
 
@@ -26,3 +26,76 @@ def influencer_find():
 @login_required
 def influencer_stats():
     return render_template("influencer_pages/influencer-stats.html", user=current_user)
+
+@influencer.route("/filter", methods=["GET","POST"])
+@login_required
+def filter():
+    if request.method == "POST":
+        filter_keyword = request.form.get("filter")
+
+        if not filter_keyword:
+            flash("Couldn't find item", category='error')
+            return redirect(url_for("influencer.influencer-find"))
+        
+        matched_campaign = []
+
+        operators = ['>', '<', '=']
+        operator = None
+
+        if filter_keyword[0:2] in ['>=', '<=']:
+            try:
+                filter_keyword_num = float(filter_keyword[2:].strip())
+                if filter_keyword[0:2] == "<=":
+                    operator = "<="
+                else:
+                    operator = ">="
+                is_number = True
+            except ValueError:
+                is_number = False
+        
+        else:
+            for op in operators:
+                if filter_keyword.startswith(op):
+                    operator = op
+                    try:
+                        filter_keyword_num = float(filter_keyword[len(op):].strip())
+                        is_number = True
+                    except ValueError:
+                        is_number = False
+                    break
+                else:
+                    is_number = False
+
+        if operator and is_number:
+            if operator == '>':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget > filter_keyword_num).all()
+            elif operator == '<':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget < filter_keyword_num).all()
+            elif operator == '=':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget == filter_keyword_num).all()
+            elif operator == '>=':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget >= filter_keyword_num).all()
+            elif operator == '<=':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget <= filter_keyword_num).all()
+
+            matched_campaign.extend(matched_campaign_budget)
+
+
+        if is_number:
+            if matched_campaign:
+                return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=matched_campaign)
+            else:
+                flash("Couldn't find item", category='error')
+                return redirect(url_for("influencer.influencer_find"))
+        
+        else:
+            matched_campaign = Campaigns.query.filter(Campaigns.title.like('%'+filter_keyword+'%')).all()
+            if matched_campaign:
+                return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=matched_campaign)
+
+            matched_campaign = Campaigns.query.filter(Campaigns.description.like('%'+filter_keyword+'%')).all()
+            if matched_campaign:
+                return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=matched_campaign)
+        
+        flash("Couldn't find item", category='error')
+        return redirect(url_for("influencer.influencer_find"))
