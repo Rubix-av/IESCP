@@ -31,7 +31,7 @@ def login():
             if check_password_hash(influencer.password, password):
                 login_user(influencer, remember=True)
                 flash("Login successfull!", category='success')
-                return redirect(url_for("influencers.influencer_profile"))
+                return redirect(url_for("influencer.influencer_profile"))
             else:
                 flash("Incorrect password!", category='error')
                 return redirect(url_for("auth.login"))
@@ -76,7 +76,7 @@ def sponsor_register():
 
             login_user(new_sponsor, remember=True)
             flash("User created successfully", category='success')
-            return redirect(url_for("sponsors.sponsor_profile"))
+            return redirect(url_for("sponsor.sponsor_profile"))
             
 
     return render_template("sponsor_pages/sponsor-register.html", user=current_user)
@@ -86,7 +86,7 @@ def sponsor_register():
 def influencer_register():
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
-        return redirect(url_for("influencers.influencer_profile"))
+        return redirect(url_for("influencer.influencer_profile"))
     
     if request.method == "POST":
         email = request.form.get("email")
@@ -114,7 +114,7 @@ def influencer_register():
 
             login_user(new_influencer, remember=True)
             flash("Influencer created successfully", category='success')
-            return redirect(url_for("influencers.influencer_profile"))
+            return redirect(url_for("influencer.influencer_profile"))
         
     return render_template("influencer_pages/influencer-register.html", user=current_user)
 

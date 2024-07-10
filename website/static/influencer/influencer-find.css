@@ -1,0 +1,21 @@
+.campaign-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    /* border: 1px solid #ddd; */
+    border: solid rgb(84, 77, 77);
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border-width: 3px;
+}
+.btn-view {
+    font-weight: bold;
+    border-width: 2px;
+    color: black;
+}
+.btn-request {
+    font-weight: bold;
+    border-width: 2px;
+    color: black;
+}

@@ -1,0 +1,33 @@
+{% extends "view.html" %} {% block title %}Find{% endblock %}
+
+{% block view_content %}
+
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0">
+            List of Campaigns
+        </h2>
+        <!-- create a search button  -->
+        <form action="/user/search-book" method="POST" class="flex-grow-2 ms-3">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Filter Campaigns" name="search">
+            <button class="btn btn-outline-secondary" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% for campaign in allCampaigns %}
+        {% if campaign.visibility == "Public" %}
+            <div class="mt-2 campaign-row">
+                <span>{{ campaign.title }} | Details</span>
+                <div>
+                    <button class="btn btn-outline-warning btn-view">View</button>
+                    <button class="btn btn-outline-success btn-request">Request</button>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

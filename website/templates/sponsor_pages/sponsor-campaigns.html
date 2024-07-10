@@ -1,42 +1,45 @@
 {% extends "view.html" %} {% block title %}Campaigns{% endblock %}
 
 {% block view_content %}
-<h1 align="center" style="padding: 20px 10px">Sponsor Campaigns</h1>
+<h1 class="fw-bold" align="center" style="padding: 20px 10px">Sponsor Campaigns</h1>
 
 {% if allCampaigns|length == 0 %}
     <div class="alert alert-warning text-center fs-3 mt-4">
       <span><strong>Start Adding Campaigns</strong></span>
     </div>
   {% else %}
-    <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Description</th>
-        <th scope="col">Budget</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">End Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      {% for campaign in allCampaigns %}
-        <tr>
-          <th scope="row">{{loop.index}}</th>
-          <td>{{campaign.title}}</td>
-          <td>{{campaign.description}}</td>
-          <td>{{campaign.budget}}</td>
-          <td>{{campaign.start_date}}</td>
-          <td>{{campaign.end_date}}</td>
-          <td><a href="delete-campaign/{{campaign.id}}" class="btn btn-danger">Delete</a></td>
-        </tr>
-      {% endfor %}
-
-    </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-primary">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Budget</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Edit/Delete</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          
+          {% for campaign in allCampaigns %}
+            <tr style="vertical-align: middle;">
+              <th scope="row">{{loop.index}}</th>
+              <td>{{campaign.title}}</td>
+              <td>{{campaign.description}}</td>
+              <td>{{campaign.budget}}</td>
+              <td>{{campaign.start_date}}</td>
+              <td>{{campaign.end_date}}</td>
+              <td><a href="delete-campaign/{{campaign.id}}" class="btn btn-danger"><strong>Delete</strong></a></td>
+            </tr>
+          {% endfor %}
+    
+        </tbody>
+        </table>
+    </div>
   {% endif %}
 
 
-<a href="add-campaign" class="btn btn-primary">Add New Campaign</a>
+<a href="add-campaign" class="btn btn-primary"><strong>Add New Campaign</strong></a>
 {% endblock %}

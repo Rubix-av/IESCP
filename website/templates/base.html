@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='sponsor/sponsor-register.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='influencer/influencer-register.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='influencer/influencer-find.css') }}">
 
   <!-- Bootstrap scripts -->
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -35,14 +36,29 @@
 
         <!-- If user is not authenticated display only Login Register -->
         {% if user.is_authenticated %}
+
+        {% if user.rank == 1 %}
+        <!-- Influencer Navbar -->
+        <a href="/influencer/influencer-profile" class="nav-link active">Profile</a>
+        <a href="/influencer/influencer-find" class="nav-link active">Find</a>
+        <a href="/influencer/influencer-stats" class="nav-link active">Stats</a>
+        <a href="/auth/logout" class="nav-link active" style="color: rgb(255, 99, 71);"><strong>Logout</strong></a>
+        {% else %}
+        {% if user.rank == 2 %}
+        <!-- Sponsor Navbar -->
         <a href="/sponsor/sponsor-profile" class="nav-link active">Profile</a>
         <a href="/sponsor/sponsor-campaigns" class="nav-link active">Campaigns</a>
         <a href="/sponsor/sponsor-find" class="nav-link active">Find</a>
         <a href="/sponsor/sponsor-stats" class="nav-link active">Stats</a>
         <a href="/auth/logout" class="nav-link active" style="color: rgb(255, 99, 71);"><strong>Logout</strong></a>
         {% else %}
+        <!-- Admin Navbar  -->
+        {% endif %}
+        {% endif %}
+        
+        {% else %}
+        <a href="/" class="nav-link active"><strong>Home</strong></a>  
         <a href="/auth/login" class="nav-link active">Login</a>
-        <a href="/auth/logout" class="nav-link active" style="color: rgb(255, 99, 71);"><strong>Logout</strong></a>  
         {% endif %}
         
       </div>
