@@ -2,12 +2,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from os import path
+from flask_restful import Api
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
 def create_app():
     app = Flask(__name__)
+    api = Api(app)
     app.config['SECRET_KEY'] = "dsakfhaosjbdjvbakshefkdsafaseh"
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
     db.init_app(app)
@@ -18,16 +20,22 @@ def create_app():
     login_manager.init_app(app)
 
     # import modules
-    from .views import views
+    from .sponsors import sponsor
+    from .influencers import influencer
     from .auth import auth
 
     # registering blueprints
-    app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(sponsor, url_prefix="/sponsor")
+    app.register_blueprint(influencer, url_prefix="/influencer")
     app.register_blueprint(auth, url_prefix="/auth")
 
     # setting up database
     from .model import Ad_request, Campaigns, Sponsors, Influencers
     create_database(app)
+
+    # API end points
+    # from .api import Campaigns
+    # api.add_resource(Campaigns, "/api/campaign/<int:id>")
 
     # user loader for login manager
     @login_manager.user_loader
