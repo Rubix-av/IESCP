@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask_restful import Resource, fields, marshal_with, reqparse
 from flask import jsonify
 from .model import db, Campaigns
@@ -42,3 +43,8 @@ class Campaigns_API(Resource):
 
 
     
+=======
+from flask_restful import Resource
+from flask import jsonify
+from .model import db, Campaigns
+>>>>>>> 2b168d6b922924fa139402d215fb5a59a878adf6

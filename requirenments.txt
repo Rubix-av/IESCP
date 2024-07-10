@@ -1,5 +1,9 @@
 flask
 flask-sqlalchemy
 flask-login
+<<<<<<< HEAD
 flask_restful
 requests
+=======
+flask_restful
+>>>>>>> 2b168d6b922924fa139402d215fb5a59a878adf6
