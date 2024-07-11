@@ -34,8 +34,8 @@ def filter():
         filter_keyword = request.form.get("filter")
 
         if not filter_keyword:
-            flash("Couldn't find item", category='error')
-            return redirect(url_for("influencer.influencer-find"))
+            flash("No filter added", category='error')
+            return redirect(url_for("influencer.influencer_find"))
         
         matched_campaign = []
 
@@ -85,7 +85,7 @@ def filter():
             if matched_campaign:
                 return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=matched_campaign)
             else:
-                flash("Couldn't find item", category='error')
+                flash(f"Could not find relation '{filter_keyword}'", category='error')
                 return redirect(url_for("influencer.influencer_find"))
         
         else:
@@ -97,5 +97,5 @@ def filter():
             if matched_campaign:
                 return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=matched_campaign)
         
-        flash("Couldn't find item", category='error')
+        flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("influencer.influencer_find"))
