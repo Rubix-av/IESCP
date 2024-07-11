@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
-from .model import db, Campaigns
+from .model import db, Campaigns, Influencers
 from datetime import datetime
 import requests
 
@@ -8,6 +8,7 @@ sponsor = Blueprint("sponsor", __name__)
 
 # Campaign API url
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
+influencers_api_url = "http://127.0.0.1:8000/api/influencer"
 
 
 # Sponsor Routes
@@ -28,7 +29,16 @@ def sponsor_campaigns():
 @sponsor.route("/sponsor-find")
 @login_required
 def sponsor_find():
-    return render_template("sponsor_pages/sponsor-find.html", user=current_user)
+
+    # Retrieving all the campaigns
+    response = requests.get(campaigns_api_url)
+    allCampaigns = response.json()
+
+    # Retrieving all the influencers
+    response = requests.get(influencers_api_url)
+    allInfluencers = response.json()
+
+    return render_template("sponsor_pages/sponsor-find.html", user=current_user, allCampaigns=allCampaigns, allInfluencers=allInfluencers)
 
 @sponsor.route("/sponsor-stats")
 @login_required
@@ -77,3 +87,158 @@ def delete_campaign(id):
 
         flash("Campaign deleted successfully", category='success')
         return redirect(url_for("sponsor.sponsor_campaigns"))
+
+@sponsor.route("/filter-influencers", methods=["GET","POST"])
+@login_required
+def filter_influencers():
+    if request.method == "POST":
+        filter_keyword = request.form.get("filter")
+
+        if not filter_keyword:
+            flash("No filter added", category='error')
+            return redirect(url_for("sponsor.sponsor_find"))
+        
+        matched_influencer = []
+
+        # Retrieving campaigns
+        response = requests.get(campaigns_api_url)
+        allCampaigns = response.json()
+
+        operators = ['>', '<', '=']
+        operator = None
+
+        if filter_keyword[0:2] in ['>=', '<=']:
+            try:
+                filter_keyword_num = float(filter_keyword[2:].strip())
+                if filter_keyword[0:2] == "<=":
+                    operator = "<="
+                else:
+                    operator = ">="
+                is_number = True
+            except ValueError:
+                is_number = False
+        
+        else:
+            for op in operators:
+                if filter_keyword.startswith(op):
+                    operator = op
+                    try:
+                        filter_keyword_num = float(filter_keyword[len(op):].strip())
+                        is_number = True
+                    except ValueError:
+                        is_number = False
+                    break
+                else:
+                    is_number = False
+
+        if operator and is_number:
+            if operator == '>':
+                matched_influencer_followers = Influencers.query.filter(Influencers.followers > filter_keyword_num).all()
+            elif operator == '<':
+                matched_influencer_followers = Influencers.query.filter(Influencers.followers < filter_keyword_num).all()
+            elif operator == '=':
+                matched_influencer_followers = Influencers.query.filter(Influencers.followers == filter_keyword_num).all()
+            elif operator == '>=':
+                matched_influencer_followers = Influencers.query.filter(Influencers.followers >= filter_keyword_num).all()
+            elif operator == '<=':
+                matched_influencer_followers = Influencers.query.filter(Influencers.followers <= filter_keyword_num).all()
+
+            matched_influencer.extend(matched_influencer_followers)
+
+
+        if is_number:
+            if matched_influencer:
+                return render_template("sponsor_pages/sponsor-find.html", user=current_user, allInfluencers=matched_influencer, allCampaigns=allCampaigns)
+            else:
+                flash(f"Could not find relation '{filter_keyword}'", category='error')
+                return redirect(url_for("sponsor.sponsor_find"))
+        
+        else:
+            matched_influencer = Influencers.query.filter(Influencers.username.like('%'+filter_keyword+'%')).all()
+            if matched_influencer:
+                return render_template("sponsor_pages/sponsor-find.html", user=current_user, allInfluencers=matched_influencer, allCampaigns=allCampaigns)
+
+            matched_influencer = Campaigns.query.filter(Campaigns.niche.like('%'+filter_keyword+'%')).all()
+            if matched_influencer:
+                return render_template("sponsor_pages/sponsor-find.html", user=current_user, allInfluencers=matched_influencer, allCampaigns=allCampaigns)
+        
+        flash(f"Could not find {filter_keyword}", category='error')
+        return redirect(url_for("sponsor.sponsor_find"))
+
+
+@sponsor.route("/filter-campaigns", methods=["GET","POST"])
+@login_required
+def filter_campaigns():
+    if request.method == "POST":
+        filter_keyword = request.form.get("filter")
+
+        if not filter_keyword:
+            flash("No filter added", category='error')
+            return redirect(url_for("sponsor.sponsor_find"))
+        
+        matched_campaign = []
+
+        # Retrieving campaigns
+        response = requests.get(influencers_api_url)
+        allInfluencers = response.json()
+
+        operators = ['>', '<', '=']
+        operator = None
+
+        if filter_keyword[0:2] in ['>=', '<=']:
+            try:
+                filter_keyword_num = float(filter_keyword[2:].strip())
+                if filter_keyword[0:2] == "<=":
+                    operator = "<="
+                else:
+                    operator = ">="
+                is_number = True
+            except ValueError:
+                is_number = False
+        
+        else:
+            for op in operators:
+                if filter_keyword.startswith(op):
+                    operator = op
+                    try:
+                        filter_keyword_num = float(filter_keyword[len(op):].strip())
+                        is_number = True
+                    except ValueError:
+                        is_number = False
+                    break
+                else:
+                    is_number = False
+
+        if operator and is_number:
+            if operator == '>':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget > filter_keyword_num).all()
+            elif operator == '<':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget < filter_keyword_num).all()
+            elif operator == '=':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget == filter_keyword_num).all()
+            elif operator == '>=':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget >= filter_keyword_num).all()
+            elif operator == '<=':
+                matched_campaign_budget = Campaigns.query.filter(Campaigns.budget <= filter_keyword_num).all()
+
+            matched_campaign.extend(matched_campaign_budget)
+
+
+        if is_number:
+            if matched_campaign:
+                return render_template("sponsor_pages/sponsor-find.html", user=current_user, allCampaigns=matched_campaign, allInfluencers=allInfluencers)
+            else:
+                flash(f"Could not find relation '{filter_keyword}'", category='error')
+                return redirect(url_for("sponsor.sponsor_find"))
+        
+        else:
+            matched_campaign = Campaigns.query.filter(Campaigns.title.like('%'+filter_keyword+'%')).all()
+            if matched_campaign:
+                return render_template("sponsor_pages/sponsor-find.html", user=current_user, allCampaigns=matched_campaign, allInfluencers=allInfluencers)
+
+            matched_campaign = Campaigns.query.filter(Campaigns.description.like('%'+filter_keyword+'%')).all()
+            if matched_campaign:
+                return render_template("sponsor_pages/sponsor-find.html", user=current_user, allCampaigns=matched_campaign, allInfluencers=allInfluencers)
+        
+        flash(f"Could not find {filter_keyword}", category='error')
+        return redirect(url_for("sponsor.sponsor_find"))
