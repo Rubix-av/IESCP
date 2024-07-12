@@ -3,13 +3,23 @@
 {% block view_content %}
 <h1 class="fw-bold" align="center" style="padding: 30px 10px; margin-top: 40px">Sponsor Campaigns</h1>
 
+<style>
+  .table th, .table td {
+      white-space: nowrap;
+  }
+  .table th:nth-child(7), .table td:nth-child(7) {
+      width: 1%;
+      white-space: nowrap;
+  }
+</style>
+
 {% if allCampaigns|length == 0 %}
     <div class="alert alert-warning text-center fs-3 mt-4">
       <span><strong>Start Adding Campaigns</strong></span>
     </div>
 {% else %}
     <div class="table-responsive">
-      <table class="table">
+      <table class="table w-100">
         <thead class="table-primary">
           <tr>
             <th scope="col">#</th>
@@ -31,7 +41,13 @@
               <td>{{campaign.budget}}</td>
               <td>{{campaign.start_date}}</td>
               <td>{{campaign.end_date}}</td>
-              <td><a href="delete-campaign/{{campaign.id}}" class="btn btn-danger"><strong>Delete</strong></a></td>
+              <td>
+                <div class="btn-group" role="group" aria-label="DeleteEditButtons">
+                  <a href="edit-campaign/{{campaign.id}}" class="btn btn-primary"><strong>Edit</strong></a>
+                  
+                  <a href="delete-campaign/{{campaign.id}}" class="btn btn-danger"><strong>Delete</strong></a>
+                </div>
+              </td>
             </tr>
           {% endfor %}
     
@@ -39,7 +55,6 @@
         </table>
     </div>
   {% endif %}
-
 
 <a href="add-campaign" class="btn btn-primary"><strong>Add New Campaign</strong></a>
 {% endblock %}

@@ -88,6 +88,44 @@ def delete_campaign(id):
         flash("Campaign deleted successfully", category='success')
         return redirect(url_for("sponsor.sponsor_campaigns"))
 
+@sponsor.route("edit-campaign/<int:id>", methods=["GET","POST"])
+@login_required
+def update_campaign(id):
+    if request.method=="POST":
+        title = request.form.get("title")
+        desc = request.form.get("description")
+        budget = int(request.form.get("budget"))
+        niche = request.form.get("niche")
+        
+        try:
+            startDate = datetime.fromisoformat(request.form.get("startDate"))
+            endDate = datetime.fromisoformat(request.form.get("endDate"))
+        except ValueError:
+            flash("You need to enter date", category='error')
+            return redirect(url_for("sponsor.sponsor_campaigns"))
+
+        if budget<=0:
+            flash("You need to enter some budget!", category='error')
+            return redirect(url_for("sponsor.sponsor_campaigns"))
+        
+        if startDate > endDate:
+            flash("Enter proper dates!", category='error')
+            return redirect(url_for("sponsor.sponsor_campaigns"))
+        
+        campaign = Campaigns.query.filter_by(id=id).first()
+        campaign.title = title
+        campaign.desc = desc
+        campaign.budget = budget
+        campaign.niche = niche
+        campaign.startDate = startDate
+        campaign.endDate = endDate
+        db.session.add(campaign)
+        db.session.commit()
+        return redirect(url_for("sponsor.sponsor_campaigns"))
+
+    updateCampaign = Campaigns.query.filter_by(id=id).first()
+    return render_template("sponsor_pages/campaign-edit.html", user=current_user, campaign=updateCampaign)
+
 @sponsor.route("/filter-influencers", methods=["GET","POST"])
 @login_required
 def filter_influencers():
@@ -165,7 +203,6 @@ def filter_influencers():
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("sponsor.sponsor_find"))
 
-
 @sponsor.route("/filter-campaigns", methods=["GET","POST"])
 @login_required
 def filter_campaigns():
@@ -242,3 +279,5 @@ def filter_campaigns():
         
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("sponsor.sponsor_find"))
+    
+
