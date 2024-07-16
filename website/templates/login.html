@@ -21,6 +21,13 @@
   <form method="POST" class="form-control" id="login-form">
       <h2 class="fw-bold" align="center">Login</h2> <br>
 
+      <select class="form-select form-floating mb-4" aria-label="Default select example" name="user_rank" required>
+        <option value="1">Influencer</option>
+        <option value="2">Sponsor</option>
+        <option value="0">Admin</option>
+        <option selected disabled>Login as...</option>
+      </select>
+
       <div class="form-floating mb-4">
         <input type="email" id="email" name="email" placeholder="Enter Email" class="form-control">
         <label for="email">Email : </label>
@@ -30,7 +37,7 @@
         <input type="password" id="password" name="password" placeholder="Enter Password" class="form-control">
         <label type="password">Password : </label>
       </div>
-        <button class="btn btn-primary" type="submit" id="login" style="width: 140px;">Login</button>
+      <button class="btn btn-primary" type="submit" id="login" style="width: 140px;">Login</button>
   </form>
 </div>
 {% endblock %}

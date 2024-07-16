@@ -53,7 +53,7 @@ def add_campaign():
         desc = request.form.get("description")
         budget = int(request.form.get("budget"))
         niche = request.form.get("niche")
-        
+
         try:
             startDate = datetime.fromisoformat(request.form.get("startDate"))
             endDate = datetime.fromisoformat(request.form.get("endDate"))
@@ -64,13 +64,13 @@ def add_campaign():
         if budget<=0:
             flash("You need to enter some budget!", category='error')
             return redirect(url_for("sponsor.add_campaign"))
-        
+
         if startDate > endDate:
             flash("Enter proper dates!", category='error')
             return redirect(url_for("sponsor.add_campaign"))
-        
+
         new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget)
-        
+
         db.session.add(new_campaign)
         db.session.commit()
 
@@ -82,7 +82,7 @@ def add_campaign():
 @login_required
 def delete_campaign(id):
     if request.method == "GET":
-        
+
         response = requests.delete(campaigns_api_url + f"/{id}")
 
         flash("Campaign deleted successfully", category='success')
@@ -96,7 +96,7 @@ def update_campaign(id):
         desc = request.form.get("description")
         budget = int(request.form.get("budget"))
         niche = request.form.get("niche")
-        
+
         try:
             startDate = datetime.fromisoformat(request.form.get("startDate"))
             endDate = datetime.fromisoformat(request.form.get("endDate"))
@@ -107,11 +107,11 @@ def update_campaign(id):
         if budget<=0:
             flash("You need to enter some budget!", category='error')
             return redirect(url_for("sponsor.sponsor_campaigns"))
-        
+
         if startDate > endDate:
             flash("Enter proper dates!", category='error')
             return redirect(url_for("sponsor.sponsor_campaigns"))
-        
+
         campaign = Campaigns.query.filter_by(id=id).first()
         campaign.title = title
         campaign.desc = desc
@@ -135,7 +135,7 @@ def filter_influencers():
         if not filter_keyword:
             flash("No filter added", category='error')
             return redirect(url_for("sponsor.sponsor_find"))
-        
+
         matched_influencer = []
 
         # Retrieving campaigns
@@ -155,7 +155,7 @@ def filter_influencers():
                 is_number = True
             except ValueError:
                 is_number = False
-        
+
         else:
             for op in operators:
                 if filter_keyword.startswith(op):
@@ -190,7 +190,7 @@ def filter_influencers():
             else:
                 flash(f"Could not find relation '{filter_keyword}'", category='error')
                 return redirect(url_for("sponsor.sponsor_find"))
-        
+
         else:
             matched_influencer = Influencers.query.filter(Influencers.username.like('%'+filter_keyword+'%')).all()
             if matched_influencer:
@@ -199,7 +199,7 @@ def filter_influencers():
             matched_influencer = Campaigns.query.filter(Campaigns.niche.like('%'+filter_keyword+'%')).all()
             if matched_influencer:
                 return render_template("sponsor_pages/sponsor-find.html", user=current_user, allInfluencers=matched_influencer, allCampaigns=allCampaigns)
-        
+
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("sponsor.sponsor_find"))
 
@@ -212,7 +212,7 @@ def filter_campaigns():
         if not filter_keyword:
             flash("No filter added", category='error')
             return redirect(url_for("sponsor.sponsor_find"))
-        
+
         matched_campaign = []
 
         # Retrieving campaigns
@@ -232,7 +232,7 @@ def filter_campaigns():
                 is_number = True
             except ValueError:
                 is_number = False
-        
+
         else:
             for op in operators:
                 if filter_keyword.startswith(op):
@@ -267,7 +267,7 @@ def filter_campaigns():
             else:
                 flash(f"Could not find relation '{filter_keyword}'", category='error')
                 return redirect(url_for("sponsor.sponsor_find"))
-        
+
         else:
             matched_campaign = Campaigns.query.filter(Campaigns.title.like('%'+filter_keyword+'%')).all()
             if matched_campaign:
@@ -276,8 +276,6 @@ def filter_campaigns():
             matched_campaign = Campaigns.query.filter(Campaigns.description.like('%'+filter_keyword+'%')).all()
             if matched_campaign:
                 return render_template("sponsor_pages/sponsor-find.html", user=current_user, allCampaigns=matched_campaign, allInfluencers=allInfluencers)
-        
+
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("sponsor.sponsor_find"))
-    
-

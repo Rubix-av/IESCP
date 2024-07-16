@@ -2,19 +2,17 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy import Date
 
-class Sponsors(db.Model, UserMixin):
-    __tablename__ = "sponsors"
+class Admins(db.Model, UserMixin):
+    __tablename__ = "admins"
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
-    industry = db.Column(db.String(150), nullable=False)
-    budget = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(50), nullable=False)
-    rank = db.Column(db.Integer, default=2, nullable=False)
+    rank = db.Column(db.Integer, default=0, nullable=False)
 
     def get_id(self):
-        return f"sponsor-{self.id}"
+        return f"admin-{self.id}"
 
 class Influencers(db.Model, UserMixin):
     __tablename__ = "influencers"
@@ -33,6 +31,20 @@ class Influencers(db.Model, UserMixin):
 
     def get_id(self):
         return f"influencer-{self.id}"
+    
+class Sponsors(db.Model, UserMixin):
+    __tablename__ = "sponsors"
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    username = db.Column(db.String(100), nullable=False)
+    industry = db.Column(db.String(150), nullable=False)
+    budget = db.Column(db.Integer, nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    rank = db.Column(db.Integer, default=2, nullable=False)
+
+    def get_id(self):
+        return f"sponsor-{self.id}"
 
 class Ad_request(db.Model, UserMixin):
     __tablename__ = "ad_request"

@@ -24,15 +24,17 @@ def create_app():
     from .influencers import influencer
     from .auth import auth
     from .home import home
+    from .admin import admin
 
     # registering blueprints
     app.register_blueprint(home, url_prefix="/")
     app.register_blueprint(sponsor, url_prefix="/sponsor")
     app.register_blueprint(influencer, url_prefix="/influencer")
     app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(admin, url_prefix="/admin")
 
     # setting up database
-    from .model import Ad_request, Campaigns, Sponsors, Influencers
+    from .model import Ad_request, Campaigns, Sponsors, Influencers, Admins
     create_database(app)
 
     # API end points
@@ -49,6 +51,9 @@ def create_app():
         elif user_id.startswith('influencer-'):
             user_id = user_id.replace('influencer-', '')
             return Influencers.query.get(int(user_id))
+        elif user_id.startswith('admin-'):
+            user_id = user_id.replace('admin-', '')
+            return Admins.query.get(int(user_id))
         return None
 
     return app

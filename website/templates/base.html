@@ -63,8 +63,16 @@
             <span style="color: white; font-size: 30px">|</span>
             <strong><a href="/sponsor/sponsor-stats" class="nav-link active">Stats</a></strong>
           </div>
-            {% else %}
-          <!-- Admin Navbar  -->
+
+          {% else %}
+          <strong class="nav-link active fs-3 fw-bold">Admin</strong>
+          <div class="navbar-nav d-flex justify-content-center w-10 fs-5"  style="padding-right: 82px;">
+            <strong><a href="/admin/admin-profile" class="nav-link active">Info</a></strong>
+            <span style="color: white; font-size: 30px">|</span>
+            <strong><a href="/admin/admin-find" class="nav-link active">Find</a></strong>
+            <span style="color: white; font-size: 30px">|</span>
+            <strong><a href="/admin/admin-stats" class="nav-link active">Stats</a></strong>
+          </div>
           {% endif %}
           {% endif %}
         </div>

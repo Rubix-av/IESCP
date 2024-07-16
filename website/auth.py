@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
-from .model import db, Sponsors, Influencers
+from .model import db, Sponsors, Influencers, Admins
 from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint("auth", __name__)
@@ -15,26 +15,45 @@ def login():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
+        rank = request.form.get("user_rank")
 
-        sponsor = Sponsors.query.filter_by(email=email).first()
-        influencer = Influencers.query.filter_by(email=email).first()
+        if not rank:
+            flash("Select login type!", category='error')
+            return redirect(url_for("auth.login"))
 
-        if sponsor:
-            if check_password_hash(sponsor.password, password):
-                login_user(sponsor, remember=True)
-                flash("Login successfull!", category='success')
-                return redirect(url_for("sponsor.sponsor_profile"))
-            else:
-                flash("Incorrect password!", category='error')
-                return redirect(url_for("auth.login"))
-        if influencer:
-            if check_password_hash(influencer.password, password):
-                login_user(influencer, remember=True)
-                flash("Login successfull!", category='success')
-                return redirect(url_for("influencer.influencer_profile"))
-            else:
-                flash("Incorrect password!", category='error')
-                return redirect(url_for("auth.login"))
+        if rank == "0":
+            admin = Admins.query.filter_by(email=email).first()
+            if admin:
+                if check_password_hash(admin.password, password):
+                    login_user(admin, remember=True)
+                    flash("Login successfull!", category='success')
+                    return redirect(url_for("admin.admin_profile"))
+                else:
+                    flash("Incorrect password!", category='error')
+                    return redirect(url_for("auth.login"))
+
+        if rank == "1":
+            influencer = Influencers.query.filter_by(email=email).first()
+            if influencer:
+                if check_password_hash(influencer.password, password):
+                    login_user(influencer, remember=True)
+                    flash("Login successfull!", category='success')
+                    return redirect(url_for("influencer.influencer_profile"))
+                else:
+                    flash("Incorrect password!", category='error')
+                    return redirect(url_for("auth.login"))
+        
+        if rank == "2":
+            sponsor = Sponsors.query.filter_by(email=email).first()
+            if sponsor:
+                if check_password_hash(sponsor.password, password):
+                    login_user(sponsor, remember=True)
+                    flash("Login successfull!", category='success')
+                    return redirect(url_for("sponsor.sponsor_profile"))
+                else:
+                    flash("Incorrect password!", category='error')
+                    return redirect(url_for("auth.login"))
+
         else:
             flash("User doesn't exist!", category='error')
             return redirect(url_for("auth.login"))
