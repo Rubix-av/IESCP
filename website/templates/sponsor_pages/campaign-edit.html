@@ -18,6 +18,12 @@
       <input type="number" id="budget" name="budget" placeholder="Enter Budget" class="form-control" value="{{campaign.budget}}">
       <label for="budget">Budget</label>
     </div>
+
+    <select class="form-select form-floating mb-4" aria-label="Default select example" name="campaign_visibility" value="{{campaign.visibility}}" required>
+      <option value="Public">Public</option>
+      <option value="Private">Private</option>
+      <option selected disabled>Campaign visibility</option>
+    </select>
       
     <div class="form-floating mb-4">
       <input type="date" id="startDate" name="startDate" placeholder="Enter Start Date" class="form-control" value="{{campaign.start_date}}">

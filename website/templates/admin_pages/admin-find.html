@@ -1,5 +1,107 @@
 {% extends "view.html" %} {% block title %}Find{% endblock %}
 
 {% block view_content %}
-<h1>This is Admin Find</h1>
+
+<!-- List of Campaigns -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0">
+            Campaigns
+        </h2>
+        <!-- create a search button  -->
+        <form action="/admin/filter-campaigns" method="POST" class="flex-grow-2 ms-3">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Filter Campaigns" name="filter" value="">
+            <button class="btn btn-outline-secondary fw-bold" style="color: black" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% if allCampaigns|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Campaigns Available</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for campaign in allCampaigns %}
+        <div class="mt-2 campaign-row">
+            <span>{{ campaign.title }} | {{ campaign.budget }}</span>
+            <div>
+                <button class="btn btn-outline-warning btn-view">View</button>
+                <button class="btn btn-outline-danger btn-view">Flag</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- List of Influencers -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0">
+            Influencers
+        </h2>
+        <!-- create a search button  -->
+        <form action="/admin/filter-influencers" method="POST" class="flex-grow-2 ms-3">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Filter Influencers" name="filter" value="">
+            <button class="btn btn-outline-secondary fw-bold" style="color: black" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% if allInfluencers|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Influencers Available</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for influencer in allInfluencers %}
+        <div class="mt-2 campaign-row">
+            <span>{{ influencer.username }} | {{ influencer.followers }}</span>
+            <div>
+                <button class="btn btn-outline-warning btn-view">View</button>
+                <button class="btn btn-outline-danger btn-view">Flag</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- List of Sponsors -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0">
+            Sponsors
+        </h2>
+        <!-- create a search button  -->
+        <form action="/admin/filter-sponsors" method="POST" class="flex-grow-2 ms-3">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Filter Sponsors" name="filter" value="">
+            <button class="btn btn-outline-secondary fw-bold" style="color: black" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% if allSponsors|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Sponsors Available</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for sponsor in allSponsors %}
+        <div class="mt-2 campaign-row">
+            <span>{{ sponsor.username }} | {{ sponsor.budget }}</span>
+            <div>
+                <button class="btn btn-outline-warning btn-view">View</button>
+                <button class="btn btn-outline-danger btn-view">Flag</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

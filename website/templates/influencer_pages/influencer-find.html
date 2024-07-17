@@ -17,23 +17,22 @@
     </div>
 
     {% if allCampaigns|length == 0 %}
-    <div class="alert alert-warning text-center fs-3 mt-4">
-      <span><strong>No Campaigns Available</strong></span>
-    </div>
+        <div class="alert alert-warning text-center fs-3 mt-4">
+        <span><strong>No Campaigns Available</strong></span>
+        </div>
     {% else %}
-    {% endif %}
-
-    {% for campaign in allCampaigns %}
-        {% if campaign.visibility == "Public" %}
-            <div class="mt-2 campaign-row">
-                <span>{{ campaign.title }} | {{ campaign.budget }}</span>
-                <div>
-                    <button class="btn btn-outline-warning btn-view">View</button>
-                    <button class="btn btn-outline-success btn-request">Request</button>
+        {% for campaign in allCampaigns %}
+            {% if campaign.visibility == "Public" %}
+                <div class="mt-2 campaign-row">
+                    <span>{{ campaign.title }} | {{ campaign.budget }}</span>
+                    <div>
+                        <button class="btn btn-outline-warning btn-view">View</button>
+                        <button class="btn btn-outline-success btn-request">Request</button>
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-    {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 </div>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask_restful import Resource, fields, marshal_with, reqparse
 from flask import jsonify
-from .model import db, Campaigns, Influencers
+from .model import db, Campaigns, Influencers, Sponsors
 
 # Add campaign fields
 campaign_fields = {
@@ -25,6 +25,15 @@ influencer_fields = {
     "rank": fields.Integer
 }
 
+sponsor_fields = {
+    "id": fields.Integer,
+    "email": fields.String,
+    "username": fields.String,
+    "industry": fields.String,
+    "budget": fields.Integer,
+    "rank": fields.Integer
+}
+
 # Request parser for campaigns
 campaigns_parser = reqparse.RequestParser()
 campaigns_parser.add_argument("title", type=str, help="Title is required", required=True)
@@ -42,6 +51,14 @@ influencers_parser.add_argument("followers", type=int, help="No. of followers is
 influencers_parser.add_argument("reach", type=int, help="Reach is required", required=False)
 influencers_parser.add_argument("platform_preference", type=str, help="Platform Preference is required", required=True)
 influencers_parser.add_argument("rank", type=int, help="Rank is required", required=True)
+
+# Request parser for sponsors
+sponsors_parser = reqparse.RequestParser()
+sponsors_parser.add_argument("email", type=str, help="Email is required", required=True)
+sponsors_parser.add_argument("username", type=str, help="Username is required", required=True)
+sponsors_parser.add_argument("industry", type=str, help="Industry is required", required=True)
+sponsors_parser.add_argument("budget", type=int, help="Budget is required", required=True)
+sponsors_parser.add_argument("rank", type=int, help="Rank is required", required=True)
 
 class Campaigns_API(Resource):
     @marshal_with(campaign_fields)
@@ -83,5 +100,17 @@ class Influencers_API(Resource):
         db.session.delete(influencer)
         db.session.commit()
 
+class Sponsors_API(Resource):
+    @marshal_with(sponsor_fields)
+    def get(self, id=None):
+        if id:
+            sponsor = Sponsors.query.get(id)
+            if not sponsor:
+                return jsonify({"error": f"Sponsor id {id} not found"}), 404
+            else:
+                return sponsor
+        else:
+            sponsor = Sponsors.query.all()
+            return sponsor
 
     

@@ -6,7 +6,7 @@ import requests
 
 sponsor = Blueprint("sponsor", __name__)
 
-# Campaign API url
+# API url
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 influencers_api_url = "http://127.0.0.1:8000/api/influencer"
 
@@ -52,7 +52,7 @@ def add_campaign():
         title = request.form.get("title")
         desc = request.form.get("description")
         budget = int(request.form.get("budget"))
-        niche = request.form.get("niche")
+        visibility = request.form.get("campaign_visibility")
 
         try:
             startDate = datetime.fromisoformat(request.form.get("startDate"))
@@ -65,11 +65,15 @@ def add_campaign():
             flash("You need to enter some budget!", category='error')
             return redirect(url_for("sponsor.add_campaign"))
 
+        if not visibility:
+            flash("You need to set visibility!", category='error')
+            return redirect(url_for("sponsor.add_campaign"))
+
         if startDate > endDate:
             flash("Enter proper dates!", category='error')
             return redirect(url_for("sponsor.add_campaign"))
 
-        new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget)
+        new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget, visibility=visibility)
 
         db.session.add(new_campaign)
         db.session.commit()
@@ -95,7 +99,7 @@ def update_campaign(id):
         title = request.form.get("title")
         desc = request.form.get("description")
         budget = int(request.form.get("budget"))
-        niche = request.form.get("niche")
+        visibility = request.form.get("campaign_visibility")
 
         try:
             startDate = datetime.fromisoformat(request.form.get("startDate"))
@@ -108,6 +112,10 @@ def update_campaign(id):
             flash("You need to enter some budget!", category='error')
             return redirect(url_for("sponsor.sponsor_campaigns"))
 
+        if not visibility:
+            flash("You need to set visibility!", category='error')
+            return redirect(url_for("sponsor.add_campaign"))
+
         if startDate > endDate:
             flash("Enter proper dates!", category='error')
             return redirect(url_for("sponsor.sponsor_campaigns"))
@@ -116,7 +124,7 @@ def update_campaign(id):
         campaign.title = title
         campaign.desc = desc
         campaign.budget = budget
-        campaign.niche = niche
+        campaign.visibility = visibility
         campaign.startDate = startDate
         campaign.endDate = endDate
         db.session.add(campaign)

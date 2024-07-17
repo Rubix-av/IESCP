@@ -20,6 +20,8 @@ def influencer_find():
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
 
+    allCampaigns = [campaign for campaign in allCampaigns if campaign.get('visibility') == 'Public']
+
     return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=allCampaigns)
 
 @influencer.route("/influencer-stats")
