@@ -3,7 +3,7 @@
 {% block view_content %}
 <h1 class="fw-bold" align="center" style="padding: 30px 10px; margin-top: 40px">Sponsor Campaigns</h1>
 
-<style>
+<!-- <style>
   .table th, .table td {
       white-space: nowrap;
   }
@@ -11,15 +11,15 @@
       width: 1%;
       white-space: nowrap;
   }
-</style>
+</style> -->
 
 {% if allCampaigns|length == 0 %}
     <div class="alert alert-warning text-center fs-3 mt-4">
       <span><strong>Start Adding Campaigns</strong></span>
     </div>
 {% else %}
-    <div class="table-responsive">
-      <table class="table w-100">
+    <div class="table-responsive-sm">
+      <table class="table w-100 table-fixed-description">
         <thead class="table-primary">
           <tr>
             <th scope="col">#</th>
@@ -37,7 +37,7 @@
             <tr style="vertical-align: middle;">
               <th scope="row">{{loop.index}}</th>
               <td>{{campaign.title}}</td>
-              <td>{{campaign.description}}</td>
+              <td style="word-wrap: break-word;min-width: 160px;max-width: 400px;">{{campaign.description}}</td>
               <td>{{campaign.budget}}</td>
               <td>{{campaign.start_date}}</td>
               <td>{{campaign.end_date}}</td>

@@ -26,13 +26,41 @@
     {% endif %}
 
     {% for campaign in allCampaigns %}
-        <div class="mt-2 campaign-row">
-            <span>{{ campaign.title }} | {{ campaign.budget }}</span>
-            <div>
-                <button class="btn btn-outline-warning btn-view">View</button>
-                <button class="btn btn-outline-danger btn-view">Flag</button>
-            </div>
+    <div class="mt-2 campaign-row">
+        <span>{{ campaign.title }} | {{ campaign.budget }}</span>
+        <div>
+            <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">View</button>
+            <div class="modal fade" id="campaign-{{campaign.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ campaign.title }}</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <h4>Description</h4>
+                      {{ campaign.description }}
+                      <hr>
+                      <h4>Budget</h4>
+                      {{ campaign.budget }}
+                      <hr>
+                      <h4>Start Date</h4>
+                      {{ campaign.start_date }}
+                      <hr>
+                      <h4>End Date</h4>
+                      {{ campaign.end_date }}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <button class="btn btn-outline-danger btn-request">Flag</button>
+            
         </div>
+    </div>
     {% endfor %}
 </div>
 
@@ -63,8 +91,35 @@
         <div class="mt-2 campaign-row">
             <span>{{ influencer.username }} | {{ influencer.followers }}</span>
             <div>
-                <button class="btn btn-outline-warning btn-view">View</button>
-                <button class="btn btn-outline-danger btn-view">Flag</button>
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#influencer-{{influencer.id}}">View</button>
+                <div class="modal fade" id="influencer-{{influencer.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ influencer.username }}</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h4>Email</h4>
+                          {{ influencer.email }}
+                          <hr>
+                          <h4>Category</h4>
+                          {{ influencer.category }}
+                          <hr>
+                          <h4>Niche</h4>
+                          {{ influencer.niche }}
+                          <hr>
+                          <h4>Followers</h4>
+                          {{ influencer.followers }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button class="btn btn-outline-danger btn-view">Flag</button>                
             </div>
         </div>
     {% endfor %}
@@ -97,8 +152,33 @@
         <div class="mt-2 campaign-row">
             <span>{{ sponsor.username }} | {{ sponsor.budget }}</span>
             <div>
-                <button class="btn btn-outline-warning btn-view">View</button>
-                <button class="btn btn-outline-danger btn-view">Flag</button>
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#sponsor-{{sponsor.id}}">View</button>
+                <div class="modal fade" id="sponsor-{{sponsor.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ sponsor.username }}</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h4>Email</h4>
+                          {{ sponsor.email }}
+                          <hr>
+                          <h4>Industry</h4>
+                          {{ sponsor.industry }}
+                          <hr>
+                          <h4>Budget</h4>
+                          {{ sponsor.budget }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button class="btn btn-outline-danger btn-view">Flag</button>
+                
             </div>
         </div>
     {% endfor %}
