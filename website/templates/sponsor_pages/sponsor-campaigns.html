@@ -43,10 +43,10 @@
               <td>{{campaign.end_date}}</td>
               <td>
                 <div class="btn-group" role="group" aria-label="DeleteEditButtons">
-                  <a href="edit-campaign/{{campaign.id}}" class="btn btn-primary"><strong>Edit</strong></a>
+                  <a href="edit-campaign/{{campaign.id}}"  style="border-radius: 2px;" class="btn btn-outline-primary"><strong>Edit</strong></a>
                   
                   <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-danger fw-bold" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
+                  <button type="button" class="btn btn-outline-danger fw-bold" style="border-radius: 2px;" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
                     Delete
                   </button>
 
@@ -79,5 +79,5 @@
     </div>
   {% endif %}
 
-<a href="add-campaign" class="btn btn-primary"><strong>Add New Campaign</strong></a>
+<a href="add-campaign" class="btn btn-primary fw-bold">New Campaign</a>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "view.html" %} {% block title %}Add Campaigns{% endblock %}
 
 {% block view_content %}
-<br><h1 class="fw-bold" align="center">Create Campaigns</h1> <br>
+<br><h1 class="fw-bold" align="center">Create Campaign</h1> <br>
 <form method="POST" class="form-control" id="create-campaign-form">
 
     <div class="form-floating mb-4">
@@ -34,6 +34,6 @@
       <input type="date" id="endDate" name="endDate" placeholder="Enter End Date" class="form-control">
       <label for="endDate">End Date</label>
     </div>
-    <button class="btn btn-primary" type="submit" id="login">Add</button>
+    <button class="btn btn-primary fw-bold" type="submit" id="login">Add</button>
 </form>
 {% endblock %}

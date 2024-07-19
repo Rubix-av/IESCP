@@ -122,7 +122,7 @@ def update_campaign(id):
 
         campaign = Campaigns.query.filter_by(id=id).first()
         campaign.title = title
-        campaign.desc = desc
+        campaign.description = desc
         campaign.budget = budget
         campaign.visibility = visibility
         campaign.startDate = startDate
