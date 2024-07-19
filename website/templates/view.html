@@ -21,7 +21,7 @@
 </style>
 
 {% if user.is_authenticated %}
-<div class="container-fluid mt-5 fixed-bottom flex-grow-1" style="margin-top: auto;">
+<!-- <div class="container-fluid mt-5 fixed-bottom flex-grow-1" style="margin-top: auto;">
   <table class="table-bordered border-secondary" align="center">
     <tbody>
       <tr>
@@ -30,6 +30,21 @@
       </tr>
     </tbody>
   </table>
+</div> -->
+
+<div class="accordion container-fluid mt-5 fixed-bottom flex-grow-1 w-25" style="margin-top: auto;" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button fw-bold" style="background-color: #cfe2ff;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Login Information
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" style="outline: none; border: none;" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Logged in as <strong>{{user.email}}</strong> 
+      </div>
+    </div>
+  </div>
 </div>
 {% endif %}
 {% endblock %}

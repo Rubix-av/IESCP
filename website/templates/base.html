@@ -11,6 +11,7 @@
   <!-- CSS stylesheets -->
   <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='view-modal.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='sponsor/sponsor-register.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='influencer/influencer-register.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='influencer/influencer-find.css') }}">
@@ -79,7 +80,8 @@
         </div>
 
         <div class="fs-5" style="text-align: right;">
-          <a href="/auth/logout" class="nav-link active" style="color: rgb(255, 99, 71);"><strong>Logout</strong></a>
+          <a href="/auth/logout" type="button" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{user.email}}" style="color: rgb(255, 99, 71);"><strong>Logout</strong>
+          </a>
         </div>
         
         {% else %}

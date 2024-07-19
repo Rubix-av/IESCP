@@ -45,7 +45,30 @@
                 <div class="btn-group" role="group" aria-label="DeleteEditButtons">
                   <a href="edit-campaign/{{campaign.id}}" class="btn btn-primary"><strong>Edit</strong></a>
                   
-                  <a href="delete-campaign/{{campaign.id}}" class="btn btn-danger"><strong>Delete</strong></a>
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-danger fw-bold" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
+                    Delete
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="campaign-{{campaign.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          This will delete the campaign. Are you sure you want to continue?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                          <a href="delete-campaign/{{campaign.id}}" class="btn btn-danger fw-bold">Delete</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </td>
             </tr>
