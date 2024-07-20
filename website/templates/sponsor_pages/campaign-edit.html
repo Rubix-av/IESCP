@@ -20,9 +20,9 @@
     </div>
 
     <select class="form-select form-floating mb-4" aria-label="Default select example" name="campaign_visibility" value="{{campaign.visibility}}" required>
-      <option value="Public">Public</option>
-      <option value="Private">Private</option>
-      <option selected disabled>Campaign visibility</option>
+      <option value="Public" {% if campaign.visibility == 'Public' %}selected{% endif %}>Public</option>
+      <option value="Private" {% if campaign.visibility == 'Private' %}selected{% endif %}>Private</option>
+      <option disabled {% if campaign.visibility is none %}selected{% endif %}>Campaign visibility</option>
     </select>
       
     <div class="form-floating mb-4">

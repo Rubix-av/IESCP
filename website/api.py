@@ -70,7 +70,7 @@ class Campaigns_API(Resource):
             else:
                 return campaign
         else:
-            campaigns = Campaigns.query.all()
+            campaigns = Campaigns.query.order_by(Campaigns.title).all()
             return campaigns
 
     def delete(self, id):
@@ -90,7 +90,7 @@ class Influencers_API(Resource):
             else:
                 return influencer
         else:
-            influencers = Influencers.query.all()
+            influencers = Influencers.query.order_by(Influencers.username).all()
             return influencers
 
     def delete(self, id):
@@ -110,7 +110,7 @@ class Sponsors_API(Resource):
             else:
                 return sponsor
         else:
-            sponsor = Sponsors.query.all()
+            sponsor = Sponsors.query.order_by(Sponsors.username).all()
             return sponsor
 
     

@@ -238,7 +238,7 @@ def filter_campaigns():
                 else:
                     operator = ">="
                 is_number = True
-            except ValueError:
+            except ValueError:     
                 is_number = False
 
         else:
