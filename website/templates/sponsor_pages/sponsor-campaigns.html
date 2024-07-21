@@ -1,7 +1,7 @@
 {% extends "view.html" %} {% block title %}Campaigns{% endblock %}
 
 {% block view_content %}
-<h1 class="fw-bold" align="center" style="padding: 30px 10px; margin-top: 40px">Sponsor Campaigns</h1>
+<h1 class="fw-bold" align="center" style="padding: 30px 10px; margin-top: 30px; margin-bottom: 35px">Sponsor Campaigns</h1>
 
 <!-- <style>
   .table th, .table td {
@@ -13,71 +13,68 @@
   }
 </style> -->
 
+
+<div class="d-flex align-items-center mb-3">
+  <h3 class="mb-0 fw-bold">Add</h3>
+  <a href="add-campaign" type="button" class="btn fw-bold mb-0 ml-3">
+    <i class="bi bi-plus-circle" style="font-size: 25px"></i>
+  </a>
+</div>
+
 {% if allCampaigns|length == 0 %}
     <div class="alert alert-warning text-center fs-3 mt-4">
       <span><strong>Start Adding Campaigns</strong></span>
     </div>
 {% else %}
-    <div class="table-responsive-sm">
-      <table class="table w-100 table-fixed-description">
-        <thead class="table-primary">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Budget</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Edit/Delete</th>
-          </tr>
-        </thead>
-        <tbody class="table-group-divider">
-          
-          {% for campaign in allCampaigns %}
-            <tr style="vertical-align: middle;">
-              <th scope="row">{{loop.index}}</th>
-              <td>{{campaign.title}}</td>
-              <td style="word-wrap: break-word;min-width: 160px;max-width: 400px;">{{campaign.description}}</td>
-              <td>{{campaign.budget}}</td>
-              <td>{{campaign.start_date}}</td>
-              <td>{{campaign.end_date}}</td>
-              <td>
-                <div class="btn-group" role="group" aria-label="DeleteEditButtons">
-                  <a href="edit-campaign/{{campaign.id}}"  style="border-radius: 2px;" class="btn btn-outline-primary"><strong>Edit</strong></a>
-                  
-                  <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-outline-danger fw-bold" style="border-radius: 2px;" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
-                    Delete
-                  </button>
 
-                  <!-- Modal -->
-                  <div class="modal fade" id="campaign-{{campaign.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          This will delete the campaign. Are you sure you want to continue?
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
-                          <a href="delete-campaign/{{campaign.id}}" class="btn btn-danger fw-bold">Delete</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+<div class="row g-4">
+  {% for campaign in allCampaigns %}
+  <div class="col-sm-4 mb-5">
+      <div class="card h-100">
+          <h2 align="center">{{campaign.title}}</h2>
+          <div class="card-body">
+              <p>{{campaign.description}}</p>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              {% if campaign.visibility == "Public" %}
+              <span class="badge rounded-pill text-bg-info">{{campaign.visibility}}</span>
+              {% else %}
+              <span class="badge rounded-pill text-bg-warning">{{campaign.visibility}}</span>
+              {% endif %}
+              <a href="campaign-view/{{campaign.id}}" class="stretched-link"></a>
+          </div>
+      </div>
+      <div class="btn-group mb-2" role="group" aria-label="DeleteEditButtons">
+        <a href="edit-campaign/{{campaign.id}}"  style="border-radius: 60px;" class="btn btn-primary"><strong><i class="bi bi-pencil"></i></strong></a>
+        
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger fw-bold" style="border-radius: 20px;" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
+          <i class="bi bi-trash3"></i>
+        </button>
 
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-    
-        </tbody>
-        </table>
-    </div>
-  {% endif %}
+        <!-- Modal -->
+        <div class="modal fade" id="campaign-{{campaign.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                This will delete the campaign. Are you sure you want to continue?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                <a href="delete-campaign/{{campaign.id}}" class="btn btn-danger fw-bold">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<a href="add-campaign" class="btn btn-primary fw-bold">New Campaign</a>
+      </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endif %}
+
 {% endblock %}

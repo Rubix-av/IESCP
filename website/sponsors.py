@@ -287,3 +287,12 @@ def filter_campaigns():
 
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("sponsor.sponsor_find"))
+
+@sponsor.route("campaign-view/<int:id>")
+def campaign_view(id):
+    if request.method == "GET":
+
+        response = requests.get(campaigns_api_url + f"/{id}")
+        campaign = response.json()
+
+        return render_template("sponsor_pages/campaign-view.html",user=current_user, campaign=campaign)

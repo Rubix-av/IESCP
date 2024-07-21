@@ -1,0 +1,10 @@
+{% extends 'view.html' %} {% block title %}Campaign{% endblock %}
+
+{% block view_content %}
+<div>
+    <h1>{{campaign.title}}</h1>
+    <h5>{{campaign.description}}</h5>
+    <h5>{{campaign.budget}}</h5>
+    <h5>{{campaign.visibility}}</h5>
+</div>
+{% endblock %}
