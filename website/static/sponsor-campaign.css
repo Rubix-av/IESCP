@@ -1,0 +1,96 @@
+/* Card styles */
+.card {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 8px;
+    text-align: center;
+  }
+  
+  /* Container holding the buttons */
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  /* Common styles for buttons */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .button:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Edit button styles */
+  .edit-button {
+    background-color: #4CAF50; /* Green */
+  }
+  
+  .edit-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Delete button styles */
+  .delete-button {
+    background-color: #f44336; /* Red */
+  }
+  
+  .delete-button:hover {
+    background-color: #da190b;
+  }
+  
+  /* Icon styles */
+  .button i {
+    color: white;
+    font-size: 20px;
+  }
+  
+  /* Styles for the add button */
+.add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.add-button i {
+  margin-left: 8px;
+  font-size: 16px;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:active {
+  background-color: #003f7f;
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+hr {
+  border: 0;
+  height: 3px;
+  background: #000000; /* A nice blue color */
+}
