@@ -6,6 +6,17 @@
     border-radius: 10px;
     margin: 8px;
     text-align: center;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    background: linear-gradient(to right, #6b22f3, #2926ff);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+  }
+
+  .campaign-title{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: rgb(255, 255, 237);
+    color: black;
+    border-radius: 20px;
   }
   
   /* Container holding the buttons */

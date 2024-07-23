@@ -15,7 +15,7 @@
 
 
 <div class="d-flex align-items-center mb-3" style="padding-left: 15px">
-  <a style="font-size: 20px" href="add-campaign" type="button" class="btn add-button">
+  <a style="font-size: 20px; background-color: black; color: white" href="add-campaign" type="button" class="btn add-button">
     Add <i class="fas fa-plus"></i>
   </a>
 </div>
@@ -32,8 +32,8 @@
     {% if loop.index > 3 %}
       <hr>
     {% endif %}
-      <div class="card h-100" style="font-family:Verdana, Geneva, Tahoma, sans-serif; background: linear-gradient(to right, #6b22f3, #2926ff); color: rgb(255, 255, 255); font-weight: bold">
-          <h2 align="center" class="mt-3 fw-bold" style="font-family: Verdana, Geneva, Tahoma, sans-serif; background-color: rgb(255, 255, 237); color:black; border-radius: 20px;">{{campaign.title}}</h2>
+      <div class="card h-100">
+          <h2 align="center" class="mt-3 fw-bold campaign-title">{{campaign.title}}</h2>
           <div class="card-body">
               <p>{{campaign.description}}</p>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -50,7 +50,7 @@
         <a href="edit-campaign/{{campaign.id}}" class="btn btn-primary button edit-button"><strong><i class="fas fa-pencil-alt"></i></strong></a>
         
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-danger fw-bold button delete-button" style="border-radius: 5px;" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
+        <button type="button" class="btn btn-danger fw-bold button delete-button" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">
           <i class="fas fa-trash-alt"></i>
         </button>
 

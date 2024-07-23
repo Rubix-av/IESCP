@@ -1,0 +1,15 @@
+.headings{
+    font-size: 30px;
+}
+
+.collapseTitle{
+    background-color: black;
+    color: white;
+}
+
+.collapseTitle:hover{
+    background-color: rgb(0, 0, 0);
+    opacity: 0.8;
+    color: white;
+    transition: opacity 0.3s ease-in-out;
+}

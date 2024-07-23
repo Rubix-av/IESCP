@@ -1,70 +1,55 @@
 {% extends "view.html" %} {% block title %}Find{% endblock %}
 
 {% block view_content %}
+
 <div class="container mt-4">
 
-    <div class="mt-5 d-flex align-items-center justify-content-between">
-        <h2 class="flex-shrink-0">
-            Campaigns
-        </h2>
-        
-        <!-- create a search button  -->
-        <form action="/influencer/filter" method="POST" class="flex-grow-2 ms-3">
-            <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Filter Campaigns" name="filter" value="">
-            <button class="btn btn-outline-secondary fw-bold filterBtn" data-bs-toggle="tooltip" data-bs-placement="top"
-            data-bs-custom-class="custom-tooltip"
-            data-bs-title="Use '=','<','<=','>','>=' before numbers for comaprison" type="submit">Filter</button>
-            </div>
-            
-        </form>
+  <!-- Title and Filter -->
+  <div class="mt-5 d-flex align-items-center justify-content-between">
+      <h1 class="flex-shrink-0 btn fw-bold fs-1">
+          Campaigns
+      </h1>
+      <!-- create a search button  -->
+      <form action="/influencer/filter" method="POST" class="flex-grow-2 ms-3">
+          <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Filter Campaigns" name="filter" value="">
+          <button class="btn btn-outline-secondary fw-bold filterBtn" type="submit">Filter</button>
+          </div>
+      </form>
+  </div>
+
+  {% if allCampaigns|length == 0 %}
+  <div class="alert alert-warning text-center fs-3 mt-4">
+    <span><strong>No Campaigns Available</strong></span>
+  </div>
+  {% else %}
+  {% endif %}
+
+  <!-- Main campaign body -->
+  <div>
+    <div class="row g-4">
+      {% for campaign in allCampaigns %}
+      <div class="col-sm-4 mb-5 mt-4">
+        {% if loop.index > 3 %}
+          <hr>
+        {% endif %}
+          <div class="card h-100">
+              <h2 align="center" class="mt-3 fw-bold campaign-title">{{campaign.title}}</h2>
+              <div class="card-body">
+                  <p>{{campaign.description}}</p>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  {% if campaign.visibility == "Public" %}
+                  <span class="badge rounded-pill text-bg-info mt-2">{{campaign.visibility}}</span>
+                  {% else %}
+                  <span class="badge rounded-pill text-bg-warning mt-2">{{campaign.visibility}}</span>
+                  {% endif %}
+                  <a href="campaign-view/{{campaign.id}}" class="stretched-link"></a>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
     </div>
-
-    {% if allCampaigns|length == 0 %}
-        <div class="alert alert-warning text-center fs-3 mt-4">
-        <span><strong>No Campaigns Available</strong></span>
-        </div>
-    {% else %}
-        {% for campaign in allCampaigns %}
-            {% if campaign.visibility == "Public" %}
-                <div class="mt-2 campaign-row">
-                    <span>{{ campaign.title }} | {{ campaign.budget }}</span>
-                    <div>
-                        <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#campaign-{{campaign.id}}">View</button>
-                        <div class="modal fade" id="campaign-{{campaign.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ campaign.title }}</h1>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                  <h4>Description</h4>
-                                  {{ campaign.description }}
-                                  <hr>
-                                  <h4>Budget</h4>
-                                  {{ campaign.budget }}
-                                  <hr>
-                                  <h4>Start Date</h4>
-                                  {{ campaign.start_date }}
-                                  <hr>
-                                  <h4>End Date</h4>
-                                  {{ campaign.end_date }}
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                        <button class="btn btn-outline-success btn-request">Request</button>
-                        
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-    
+  </div>
 </div>
+
 {% endblock %}
