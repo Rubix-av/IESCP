@@ -14,17 +14,31 @@
     margin-top: 90px;
 }
 #influencer-register{
-    border-radius: 20px;
-    margin-right: 10px;
-    border: solid;
-    border-width: 3px;
-    border-color: black;
-    font-weight: bold;
+    background-color: black;
+    color: white;
 }
+#influencer-register:hover{
+    background-color: rgb(0, 0, 0);
+    opacity: 0.8;
+    color: white;
+    transition: opacity 0.3s ease-in-out;
+}
+
 #sponsor-register{
-    border-radius: 20px;
-    border: solid;
-    border-width: 3px;
-    border-color: black;
-    font-weight: bold;
+    background-color: black;
+    color: white;
+    margin-left: 5px;
+}
+#sponsor-register:hover{
+    background-color: rgb(0, 0, 0);
+    opacity: 0.8;
+    color: white;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.admin-btn{
+    position: absolute;
+    bottom: 10px;  /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    font-size: 24px;
 }

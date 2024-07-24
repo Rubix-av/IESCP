@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
-from .model import db, Campaigns, Influencers
+from .model import db, Campaigns, Influencers, Ad_request
 from datetime import datetime
 import requests
 
@@ -296,3 +296,26 @@ def campaign_view(id):
         campaign = response.json()
 
         return render_template("sponsor_pages/campaign-view.html",user=current_user, campaign=campaign)
+
+@sponsor.route("create-ad/<int:id>", methods=["GET","POST"])
+def create_ad(id):
+    if request.method == "POST":
+        
+        messages = request.form.get("message")
+        requirenments = request.form.get("requirements")
+        payment_amount = request.form.get("payment_amt")
+        campaign_id = request.form.get("select_campaign")
+        influencer_id = id
+
+        new_ad = Ad_request(messages=messages, requirenments=requirenments, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id)
+        db.session.add(new_ad)
+        db.session.commit()
+
+        flash("Ad request successfully sent!", category='success')
+        return redirect(url_for("sponsor.sponsor_campaigns"))
+
+
+    response = requests.get(campaigns_api_url)
+    allCampaigns = response.json()
+
+    return render_template("ad_request/create_ad.html", user=current_user, id=id, allCampaigns=allCampaigns)

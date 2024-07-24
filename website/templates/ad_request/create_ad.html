@@ -1,0 +1,36 @@
+{% extends 'view.html' %} {% block title %}Create Ad Request{% endblock %}
+
+{% block view_content %}
+
+<br><h1 class="fw-bold" align="center">Create Ad</h1> <br>
+
+<form method="POST" class="form-control" id="create-campaign-form">
+
+    <div class="form-floating mb-4">
+      <input type="text" id="message" name="message" placeholder="Enter Title" class="form-control">
+      <label for="message">Message</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="textbox" id="requirements" name="requirements" placeholder="Enter Title" class="form-control">
+      <label for="requirements">Requirements</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="number" id="payment_amt" name="payment_amt" placeholder="Enter Title" class="form-control">
+      <label for="payment_amt">Payment Amount</label>
+    </div>
+
+    <select class="form-select form-floating mb-4" aria-label="Default select example" name="select_campaign" required>
+
+      {% for campaign in allCampaigns %}
+        <option value="{{campaign.id}}">{{campaign.title}}</option>
+      {% endfor %}
+
+      <option selected disabled>Select Campaign</option>
+    </select>
+    
+    <button class="btn btn-primary fw-bold" type="submit" id="login">Add</button>
+</form>
+
+{% endblock %}

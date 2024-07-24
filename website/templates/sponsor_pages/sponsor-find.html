@@ -8,7 +8,11 @@
     <!-- Title and Filter -->
     <div class="mt-5 d-flex align-items-center justify-content-between">
         <h2 class="flex-shrink-0 btn fw-bold fs-3 collapseTitle" type="button" data-bs-toggle="collapse" data-bs-target="#campaignCollapse" aria-expanded="false" aria-controls="collapseExample">
-            Campaigns
+            Campaigns {% if allCampaigns|length == 0 %}
+            <i class="fas fa-circle dot red-dot"></i>
+          {% else %}
+            <i class="fas fa-circle dot green-dot"></i>
+          {% endif %}
         </h2>
         <!-- create a search button  -->
         <form action="/sponsor/filter-campaigns" method="POST" class="flex-grow-2 ms-3">
@@ -60,8 +64,13 @@
 
     <div class="mt-5 d-flex align-items-center justify-content-between">
         <h2 class="flex-shrink-0 btn fw-bold fs-3 collapseTitle" type="button" data-bs-toggle="collapse" data-bs-target="#influencerCollapse" aria-expanded="false" aria-controls="collapseExample">
-            Influencers
+            Influencers {% if allInfluencers|length == 0 %}
+            <i class="fas fa-circle dot red-dot"></i>
+          {% else %}
+            <i class="fas fa-circle dot green-dot"></i>
+          {% endif %}
         </h2>
+        
         <!-- create a search button  -->
         <form action="/sponsor/filter-influencers" method="POST" class="flex-grow-2 ms-3">
             <div class="input-group mb-3">
@@ -93,6 +102,7 @@
                     <a href="influencer-view/{{influencer.id}}" class="stretched-link"></a>
                 </div>
             </div>
+            <a type="button" class="btn btn-primary" href="create-ad/{{influencer.id}}">Request</a>
         </div>
         {% endfor %}
       </div>

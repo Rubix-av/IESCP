@@ -12,13 +12,16 @@
 
 <!-- ==============Register Buttons============== -->
 <div id="login-register-buttons">
-    <a href="/auth/influencer-register" type="button" class="btn btn-warning" id="influencer-register">Influencer Register</a>
-    <a href="/auth/sponsor-register" type="button" class="btn btn-warning" id="sponsor-register">Sponsor Register</a>
+    <a href="/auth/influencer-register" type="button" class="btn flex-shrink-0 btn fw-bold fs-5" id="influencer-register">Influencer Register</a>
+    <a href="/auth/sponsor-register" type="button" class="btn flex-shrink-0 btn fw-bold fs-5" id="sponsor-register">Sponsor Register</a>
 </div>
 
-<div class="container mt-3" align="center" id="login-container">
+<a href="/auth/admin-register" type="button" class="btn admin-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Admin Register"><i class="fas fa-user-tie"></i></a>
 
+<div class="container mt-3" align="center" id="login-container">
+  
   <form method="POST" class="form-control" id="login-form">
+    
       <h2 class="fw-bold" align="center">Login</h2> <br>
 
       <select class="form-select form-floating mb-4" aria-label="Default select example" name="user_rank" required>

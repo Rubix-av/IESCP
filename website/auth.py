@@ -31,6 +31,9 @@ def login():
                 else:
                     flash("Incorrect password!", category='error')
                     return redirect(url_for("auth.login"))
+            else:
+                flash("User doesn't exist!", category='error')
+                return redirect(url_for("auth.login"))
 
         if rank == "1":
             influencer = Influencers.query.filter_by(email=email).first()
@@ -42,6 +45,9 @@ def login():
                 else:
                     flash("Incorrect password!", category='error')
                     return redirect(url_for("auth.login"))
+            else:
+                flash("User doesn't exist!", category='error')
+                return redirect(url_for("auth.login"))
         
         if rank == "2":
             sponsor = Sponsors.query.filter_by(email=email).first()
@@ -53,6 +59,9 @@ def login():
                 else:
                     flash("Incorrect password!", category='error')
                     return redirect(url_for("auth.login"))
+            else:
+                flash("User doesn't exist!", category='error')
+                return redirect(url_for("auth.login"))
 
         else:
             flash("User doesn't exist!", category='error')
@@ -136,6 +145,43 @@ def influencer_register():
             return redirect(url_for("influencer.influencer_profile"))
         
     return render_template("influencer_pages/influencer-register.html", user=current_user)
+
+# Admin Register
+@auth.route("/admin-register", methods=["GET","POST"])
+def admin_register():
+    if current_user.is_authenticated:
+        flash("You are already logged in!", category='error')
+        return redirect(url_for("admin.admin_profile"))
+    
+    if request.method == "POST":
+        email = request.form.get("email")
+        username = request.form.get("username")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+        secret_key = request.form.get("secret_key")
+
+        admin = Admins.query.filter_by(email=email).first()
+
+        if admin:
+            flash("Admin already exists!", category='error')
+            return redirect(url_for("auth.login"))
+        elif password1 != password2:
+            flash("Incorrect password!", category='error')
+            return redirect(url_for("auth.admin_register"))
+        elif secret_key != "0987":
+            flash("Incorrect secret key!", category='error')
+            return redirect(url_for("auth.admin_register"))
+        else:
+            new_admin = Admins(email=email, username=username, password=generate_password_hash(password1))
+            
+            db.session.add(new_admin)
+            db.session.commit()
+
+            login_user(new_admin, remember=True)
+            flash("Admin created successfully", category='success')
+            return redirect(url_for("admin.admin_profile"))
+
+    return render_template("admin_pages/admin-register.html", user=current_user)
 
 # Logout User
 @auth.route("logout")

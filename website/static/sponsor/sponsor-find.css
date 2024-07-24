@@ -13,3 +13,22 @@
     color: white;
     transition: opacity 0.3s ease-in-out;
 }
+
+.button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.dot {
+    font-size: 10px;
+}
+.red-dot {
+    color: red; 
+}
+.green-dot {
+    color: rgb(7, 213, 7);
+}
