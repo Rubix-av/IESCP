@@ -8,23 +8,33 @@
 
     <div class="mt-5 d-flex align-items-center justify-content-between">
         <h2 class="flex-shrink-0 fw-bold fs-1">
-            Requests
+            Ad Requests
         </h2>
     </div>
 
-    {% if allAds|length == 0 %}
+    {% for ad in allAds %}
+      {% if ad.status != "Pending" %}
+        {% set is_pending = false %}
+      {% else %}
+        {% set is_pending = true %}
+      {% endif %}      
+    {% endfor %}
+
+    {% if (allAds|length == 0) or not is_pending %}
     <div class="alert alert-warning text-center fs-3 mt-4">
       <span><strong>No Campaigns Available</strong></span>
     </div>
+
+    
     {% endif %}
 
     {% for ad in allAds %}
-        {% if user.id == ad.influencer_id %}       
+        {% if (user.id == ad.influencer_id) and (ad.status not in ["Rejected", "Accepted"]) %}       
         <div class="mt-2 campaign-row">
             <span>{{ ad.id }} | {{ ad.payment_amount }}</span>
             <div>
-                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#ad-{{ad.id}}">View</button>
-                <div class="modal fade" id="ad-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#ad-view-{{ad.id}}">View</button>
+                <div class="modal fade" id="ad-view-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -45,14 +55,55 @@
                           {{ ad.end_date }}
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
                         </div>
                       </div>
                     </div>
                   </div>
     
-                <button class="btn btn-outline-danger btn-request">Flag</button>
+                <button class="btn btn-outline-success btn-request" data-bs-toggle="modal" data-bs-target="#ad-accept-{{ad.id}}">Accept</button>
+
+                <button class="btn btn-outline-danger btn-request" data-bs-toggle="modal" data-bs-target="#ad-reject-{{ad.id}}">
+                  Reject
+                </button>
+
+                <!-- Ad Request Reject Modal -->
+                <div class="modal fade" id="ad-reject-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to <span class="text-danger fw-bold">reject</span> this <strong>Ad Request</strong>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                        <a href="reject-ad/{{ad.id}}" class="btn btn-danger fw-bold">Confirm</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
+                <!-- Ad Accept Reject Modal -->
+                <div class="modal fade" id="ad-accept-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to <span class="text-success fw-bold">accept</span> this <strong>Ad Request</strong>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                        <a href="accept-ad/{{ad.id}}" class="btn btn-success fw-bold">Accept</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
         </div>
         

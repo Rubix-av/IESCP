@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
-from .model import db, Campaigns
+from .model import db, Campaigns, Ad_request
 import requests
 from datetime import datetime
 
@@ -107,3 +107,29 @@ def filter():
         
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("influencer.influencer_find"))
+    
+@influencer.route("reject-ad/<int:id>")
+@login_required
+def reject_ad(id):
+
+    ad_rejected = Ad_request.query.filter_by(id=id).first()
+
+    ad_rejected.status = "Rejected"
+    db.session.add(ad_rejected)
+    db.session.commit()
+
+    flash("Ad rejected successfully", category='success')
+    return redirect(url_for("influencer.influencer_profile"))
+    
+@influencer.route("accept-ad/<int:id>")
+@login_required
+def accept_ad(id):
+
+    ad_accepted = Ad_request.query.filter_by(id=id).first()
+
+    ad_accepted.status = "Accepted"
+    db.session.add(ad_accepted)
+    db.session.commit()
+
+    flash("Ad accepted successfully", category='success')
+    return redirect(url_for("influencer.influencer_profile"))

@@ -13,7 +13,7 @@ def login():
         return redirect(url_for("sponsor.sponsor_profile"))
     
     if request.method == "POST":
-        email = request.form.get("email")
+        email = request.form.get("email").lower()
         password = request.form.get("password")
         rank = request.form.get("user_rank")
 
@@ -78,7 +78,7 @@ def sponsor_register():
         return redirect(url_for("sponsors.sponsor_profile"))
     
     if request.method == "POST":
-        email = request.form.get("email")
+        email = request.form.get("email").lower()
         username = request.form.get("username")
         industry = request.form.get("industry")
         budget = int(request.form.get("budget"))
@@ -117,7 +117,7 @@ def influencer_register():
         return redirect(url_for("influencer.influencer_profile"))
     
     if request.method == "POST":
-        email = request.form.get("email")
+        email = request.form.get("email").lower()
         username = request.form.get("username")
         category = request.form.get("category")
         niche = request.form.get("niche")
@@ -154,7 +154,7 @@ def admin_register():
         return redirect(url_for("admin.admin_profile"))
     
     if request.method == "POST":
-        email = request.form.get("email")
+        email = request.form.get("email").lower()
         username = request.form.get("username")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")

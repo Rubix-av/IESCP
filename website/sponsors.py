@@ -87,7 +87,7 @@ def add_campaign():
 def delete_campaign(id):
     if request.method == "GET":
 
-        response = requests.delete(campaigns_api_url + f"/{id}")
+        requests.delete(campaigns_api_url + f"/{id}")
 
         flash("Campaign deleted successfully", category='success')
         return redirect(url_for("sponsor.sponsor_campaigns"))
@@ -317,8 +317,11 @@ def create_ad(id):
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
 
+    response = requests.get(influencers_api_url + f"/{id}")
+    influencers = response.json()
+
     if len(allCampaigns) == 0:
         flash("No campaign is available!", category='error')
         return redirect(url_for("sponsor.sponsor_find"))
 
-    return render_template("ad_request/create_ad.html", user=current_user, id=id, allCampaigns=allCampaigns)
+    return render_template("ad_request/create_ad.html", user=current_user, id=id, allCampaigns=allCampaigns, influencers=influencers)

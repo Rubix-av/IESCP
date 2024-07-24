@@ -96,6 +96,13 @@ class Campaigns_API(Resource):
         campaign = Campaigns.query.filter_by(id=id).first()    
         if not campaign:
             return jsonify({"error": f"Campaign id {id} doesn't exist"})
+        
+        ads = Ad_request.query.filter_by(campaign_id=id).all()
+        if ads:
+            for ad in ads:
+                db.session.delete(ad)
+            db.session.commit()
+
         db.session.delete(campaign)
         db.session.commit()
 
@@ -144,5 +151,12 @@ class Ad_Request_API(Resource):
         else:
             ad = Ad_request.query.order_by(Ad_request.messages).all()
             return ad
+        
+    def delete(self, id):
+        ad = Ad_request.query.filter_by(id=id).first()    
+        if not ad:
+            return jsonify({"error": f"Ad id {id} doesn't exist"})
+        db.session.delete(ad)
+        db.session.commit()
 
     
