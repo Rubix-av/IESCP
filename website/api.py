@@ -1,6 +1,6 @@
 from flask_restful import Resource, fields, marshal_with, reqparse
 from flask import jsonify
-from .model import db, Campaigns, Influencers, Sponsors
+from .model import db, Campaigns, Influencers, Sponsors, Ad_request
 
 # Add campaign fields
 campaign_fields = {
@@ -34,6 +34,16 @@ sponsor_fields = {
     "rank": fields.Integer
 }
 
+ad_request_fields = {
+    "id": fields.Integer,
+    "messages": fields.String,
+    "requirenments": fields.String,
+    "payment_amount": fields.Integer,
+    "status": fields.String,
+    "influencer_id": fields.Integer,
+    "campaign_id": fields.Integer,
+}
+
 # Request parser for campaigns
 campaigns_parser = reqparse.RequestParser()
 campaigns_parser.add_argument("title", type=str, help="Title is required", required=True)
@@ -59,6 +69,15 @@ sponsors_parser.add_argument("username", type=str, help="Username is required", 
 sponsors_parser.add_argument("industry", type=str, help="Industry is required", required=True)
 sponsors_parser.add_argument("budget", type=int, help="Budget is required", required=True)
 sponsors_parser.add_argument("rank", type=int, help="Rank is required", required=True)
+
+# Request parser for ad_request
+campaigns_parser = reqparse.RequestParser()
+campaigns_parser.add_argument("messages", type=str, help="Messages is required", required=True)
+campaigns_parser.add_argument("requirenments", type=str, help="Requirenments is required", required=True)
+campaigns_parser.add_argument("payment_amount", type=int, help="Payment Amount is required", required=True)
+campaigns_parser.add_argument("status", type=str, help="Status is required", required=False)
+campaigns_parser.add_argument("influencer_id", type=int, help="Influenecer id is required", required=True)
+campaigns_parser.add_argument("campaign_id", type=int, help="Campaign id is required", required=True)
 
 class Campaigns_API(Resource):
     @marshal_with(campaign_fields)
@@ -112,5 +131,18 @@ class Sponsors_API(Resource):
         else:
             sponsor = Sponsors.query.order_by(Sponsors.username).all()
             return sponsor
+
+class Ad_Request_API(Resource):
+    @marshal_with(ad_request_fields)
+    def get(self, id=None):
+        if id:
+            ad = Ad_request.query.get(id)
+            if not ad:
+                return jsonify({"error": f"Ad id {id} not found"}), 404
+            else:
+                return ad
+        else:
+            ad = Ad_request.query.order_by(Ad_request.messages).all()
+            return ad
 
     

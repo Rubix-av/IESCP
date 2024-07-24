@@ -304,7 +304,7 @@ def create_ad(id):
         messages = request.form.get("message")
         requirenments = request.form.get("requirements")
         payment_amount = request.form.get("payment_amt")
-        campaign_id = request.form.get("select_campaign")
+        campaign_id = int(request.form.get("select_campaign"))
         influencer_id = id
 
         new_ad = Ad_request(messages=messages, requirenments=requirenments, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id)
@@ -314,8 +314,11 @@ def create_ad(id):
         flash("Ad request successfully sent!", category='success')
         return redirect(url_for("sponsor.sponsor_campaigns"))
 
-
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
+
+    if len(allCampaigns) == 0:
+        flash("No campaign is available!", category='error')
+        return redirect(url_for("sponsor.sponsor_find"))
 
     return render_template("ad_request/create_ad.html", user=current_user, id=id, allCampaigns=allCampaigns)

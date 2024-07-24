@@ -8,11 +8,17 @@ influencer = Blueprint("influencer", __name__)
 
 # Campaings API URL
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
+ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
 
 @influencer.route("/influencer-profile")
 @login_required
 def influencer_profile():
-    return render_template("influencer_pages/influencer-profile.html", user=current_user)
+    response = requests.get(ad_request_api_url)
+    allAds = response.json()
+
+    allAds = [ad for ad in allAds if ad.get('influencer_id') == current_user.id]
+
+    return render_template("influencer_pages/influencer-profile.html", user=current_user, allAds=allAds)
 
 @influencer.route("/influencer-find")
 @login_required
