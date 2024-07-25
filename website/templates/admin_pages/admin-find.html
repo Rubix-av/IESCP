@@ -26,6 +26,7 @@
     {% endif %}
 
     {% for campaign in allCampaigns %}
+    {% if campaign.flagged == "False" %}
     <div class="mt-2 campaign-row">
         <span>{{ campaign.title }} | {{ campaign.budget }}</span>
         <div>
@@ -57,10 +58,11 @@
                 </div>
               </div>
 
-            <button class="btn btn-outline-danger btn-request">Flag</button>
+            <a href="flag-campaign/{{campaign.id}}" type="button" class="btn btn-outline-danger btn-request">Flag</a>
             
         </div>
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 
@@ -88,6 +90,7 @@
     {% endif %}
 
     {% for influencer in allInfluencers %}
+    {% if influencer.flagged == "False" %}
         <div class="mt-2 campaign-row">
             <span>{{ influencer.username }} | {{ influencer.followers }}</span>
             <div>
@@ -119,9 +122,10 @@
                     </div>
                   </div>
 
-                  <button class="btn btn-outline-danger btn-view">Flag</button>                
+                  <a href="flag-influencer/{{influencer.id}}" type="button" class="btn btn-outline-danger btn-request">Flag</a>
             </div>
         </div>
+    {% endif %}
     {% endfor %}
 </div>
 
@@ -149,6 +153,7 @@
     {% endif %}
 
     {% for sponsor in allSponsors %}
+    {% if sponsor.flagged == "False" %}
         <div class="mt-2 campaign-row">
             <span>{{ sponsor.username }} | {{ sponsor.budget }}</span>
             <div>
@@ -177,10 +182,11 @@
                     </div>
                   </div>
 
-                  <button class="btn btn-outline-danger btn-view">Flag</button>
+                  <a href="flag-sponsor/{{sponsor.id}}" type="button" class="btn btn-outline-danger btn-request">Flag</a>
                 
             </div>
         </div>
+    {% endif %}
     {% endfor %}
 </div>
 

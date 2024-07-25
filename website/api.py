@@ -10,7 +10,8 @@ campaign_fields = {
     "start_date": fields.DateTime(dt_format='iso8601'),
     "end_date": fields.DateTime(dt_format='iso8601'),
     "budget": fields.Integer,
-    "visibility": fields.String
+    "visibility": fields.String,
+    "flagged": fields.String,
 }
 
 influencer_fields = {
@@ -22,7 +23,8 @@ influencer_fields = {
     "followers": fields.Integer,
     "reach": fields.Integer,
     "platform_preference": fields.String,
-    "rank": fields.Integer
+    "rank": fields.Integer,
+    "flagged": fields.String,
 }
 
 sponsor_fields = {
@@ -31,7 +33,8 @@ sponsor_fields = {
     "username": fields.String,
     "industry": fields.String,
     "budget": fields.Integer,
-    "rank": fields.Integer
+    "rank": fields.Integer,
+    "flagged": fields.String,
 }
 
 ad_request_fields = {
@@ -50,6 +53,7 @@ campaigns_parser.add_argument("title", type=str, help="Title is required", requi
 campaigns_parser.add_argument("description", type=str, help="Description is required", required=True)
 campaigns_parser.add_argument("budget", type=int, help="Budget is required", required=True)
 campaigns_parser.add_argument("visibility", type=str, help="Visibility is required", required=False)
+campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
 
 # Request parser for influencers
 influencers_parser = reqparse.RequestParser()
@@ -61,6 +65,7 @@ influencers_parser.add_argument("followers", type=int, help="No. of followers is
 influencers_parser.add_argument("reach", type=int, help="Reach is required", required=False)
 influencers_parser.add_argument("platform_preference", type=str, help="Platform Preference is required", required=True)
 influencers_parser.add_argument("rank", type=int, help="Rank is required", required=True)
+campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
 
 # Request parser for sponsors
 sponsors_parser = reqparse.RequestParser()
@@ -69,6 +74,7 @@ sponsors_parser.add_argument("username", type=str, help="Username is required", 
 sponsors_parser.add_argument("industry", type=str, help="Industry is required", required=True)
 sponsors_parser.add_argument("budget", type=int, help="Budget is required", required=True)
 sponsors_parser.add_argument("rank", type=int, help="Rank is required", required=True)
+campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
 
 # Request parser for ad_request
 campaigns_parser = reqparse.RequestParser()

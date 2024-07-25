@@ -28,6 +28,7 @@ class Influencers(db.Model, UserMixin):
     password = db.Column(db.String(50), nullable=False)
     rank = db.Column(db.Integer, default=1, nullable=False)
     ad_requests = db.relationship("Ad_request", backref="influencers")
+    flagged = db.Column(db.String(10), default="False", nullable=False)
 
     def get_id(self):
         return f"influencer-{self.id}"
@@ -42,6 +43,7 @@ class Sponsors(db.Model, UserMixin):
     budget = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(50), nullable=False)
     rank = db.Column(db.Integer, default=2, nullable=False)
+    flagged = db.Column(db.String(10), default="False", nullable=False)
 
     def get_id(self):
         return f"sponsor-{self.id}"
@@ -67,4 +69,5 @@ class Campaigns(db.Model, UserMixin):
     end_date = db.Column(Date, nullable=False)
     budget = db.Column(db.Integer, nullable=False)
     visibility = db.Column(db.String(50), default="Public", nullable=False)
+    flagged = db.Column(db.String(10), default="False", nullable=False)
     ad_requests = db.relationship("Ad_request", backref="campaigns")

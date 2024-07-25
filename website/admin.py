@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user, login_required
-from .model import Campaigns, Influencers, Sponsors
+from .model import db, Campaigns, Influencers, Sponsors
 import requests
 
 admin = Blueprint("admin", __name__)
@@ -277,4 +277,43 @@ def filter_sponsors():
 
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("admin.admin_find"))
+
+
+
+@admin.route("/flag-campaign/<int:id>")
+@login_required
+def flag_campaign(id):
+
+    campaign = Campaigns.query.filter_by(id=id).first()
+    campaign.flagged = "True"
+    db.session.add(campaign)
+    db.session.commit()
+
+    flash("Campaign flagged successfully", category='success')
+    return redirect(url_for("admin.admin_find"))
+
+
+@admin.route("/flag-influencer/<int:id>")
+@login_required
+def flag_influencer(id):
+    
+    influencer = Influencers.query.filter_by(id=id).first()
+    influencer.flagged = "True"
+    db.session.add(influencer)
+    db.session.commit()
+
+    flash("Influencer flagged successfully", category='success')
+    return redirect(url_for("admin.admin_find"))
+
+@admin.route("/flag-sponsor/<int:id>")
+@login_required
+def flag_sponsor(id):
+    
+    sponsor = Sponsors.query.filter_by(id=id).first()
+    sponsor.flagged = "True"
+    db.session.add(sponsor)
+    db.session.commit()
+
+    flash("Sponsor flagged successfully", category='success')
+    return redirect(url_for("admin.admin_find"))
 
