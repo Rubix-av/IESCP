@@ -2,7 +2,8 @@
 
 {% block view_content %}
 
-{% set campaign_exist = false %}
+{% set count = namespace(value=0) %}
+{% set enterOnce = namespace(value="False") %}
 
 <div class="container mt-4">
 
@@ -13,23 +14,9 @@
     </div>
 
     {% for ad in allAds %}
-      {% if ad.status != "Pending" %}
-        {% set is_pending = false %}
-      {% else %}
-        {% set is_pending = true %}
-      {% endif %}      
-    {% endfor %}
-
-    {% if (allAds|length == 0) or not is_pending %}
-    <div class="alert alert-warning text-center fs-3 mt-4">
-      <span><strong>No Campaigns Available</strong></span>
-    </div>
-
-    
-    {% endif %}
-
-    {% for ad in allAds %}
-        {% if (user.id == ad.influencer_id) and (ad.status not in ["Rejected", "Accepted"]) %}       
+        {% if (user.id == ad.influencer_id) and (ad.status not in ["Rejected", "Accepted"]) %}
+          {% set count.value = count.value + 1 %}
+          {% set enterOnce.value = "True" %}
         <div class="mt-2 campaign-row">
             <span>{{ ad.id }} | {{ ad.payment_amount }}</span>
             <div>
@@ -109,6 +96,13 @@
         
         {% endif %}
     {% endfor %}
+
+    {% if (allAds|length == 0) or (enterOnce.value == "False") %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Pending Ad Requests</strong></span>
+    </div>
+    {% endif %}
+
 </div>
 
 {% endblock %}

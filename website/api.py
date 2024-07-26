@@ -12,6 +12,7 @@ campaign_fields = {
     "budget": fields.Integer,
     "visibility": fields.String,
     "flagged": fields.String,
+    "sponsor_id": fields.Integer,
 }
 
 influencer_fields = {
@@ -54,6 +55,7 @@ campaigns_parser.add_argument("description", type=str, help="Description is requ
 campaigns_parser.add_argument("budget", type=int, help="Budget is required", required=True)
 campaigns_parser.add_argument("visibility", type=str, help="Visibility is required", required=False)
 campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
+campaigns_parser.add_argument("sponsor_id", type=int, help="Sponsor id is required", required=True)
 
 # Request parser for influencers
 influencers_parser = reqparse.RequestParser()
@@ -65,7 +67,7 @@ influencers_parser.add_argument("followers", type=int, help="No. of followers is
 influencers_parser.add_argument("reach", type=int, help="Reach is required", required=False)
 influencers_parser.add_argument("platform_preference", type=str, help="Platform Preference is required", required=True)
 influencers_parser.add_argument("rank", type=int, help="Rank is required", required=True)
-campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
+influencers_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
 
 # Request parser for sponsors
 sponsors_parser = reqparse.RequestParser()
@@ -74,16 +76,16 @@ sponsors_parser.add_argument("username", type=str, help="Username is required", 
 sponsors_parser.add_argument("industry", type=str, help="Industry is required", required=True)
 sponsors_parser.add_argument("budget", type=int, help="Budget is required", required=True)
 sponsors_parser.add_argument("rank", type=int, help="Rank is required", required=True)
-campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
+sponsors_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
 
 # Request parser for ad_request
-campaigns_parser = reqparse.RequestParser()
-campaigns_parser.add_argument("messages", type=str, help="Messages is required", required=True)
-campaigns_parser.add_argument("requirenments", type=str, help="Requirenments is required", required=True)
-campaigns_parser.add_argument("payment_amount", type=int, help="Payment Amount is required", required=True)
-campaigns_parser.add_argument("status", type=str, help="Status is required", required=False)
-campaigns_parser.add_argument("influencer_id", type=int, help="Influenecer id is required", required=True)
-campaigns_parser.add_argument("campaign_id", type=int, help="Campaign id is required", required=True)
+adRequest_parser = reqparse.RequestParser()
+adRequest_parser.add_argument("messages", type=str, help="Messages is required", required=True)
+adRequest_parser.add_argument("requirenments", type=str, help="Requirenments is required", required=True)
+adRequest_parser.add_argument("payment_amount", type=int, help="Payment Amount is required", required=True)
+adRequest_parser.add_argument("status", type=str, help="Status is required", required=False)
+adRequest_parser.add_argument("influencer_id", type=int, help="Influenecer id is required", required=True)
+adRequest_parser.add_argument("campaign_id", type=int, help="Campaign id is required", required=True)
 
 class Campaigns_API(Resource):
     @marshal_with(campaign_fields)

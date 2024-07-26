@@ -24,6 +24,8 @@ def sponsor_campaigns():
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
 
+    allCampaigns = [campaign for campaign in allCampaigns if campaign['sponsor_id'] == current_user.id]
+
     return render_template("sponsor_pages/sponsor-campaigns.html", user=current_user, allCampaigns=allCampaigns)
 
 @sponsor.route("/sponsor-find")
@@ -33,6 +35,7 @@ def sponsor_find():
     # Retrieving all the campaigns
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
+    allCampaigns = [campaign for campaign in allCampaigns if campaign['sponsor_id'] == current_user.id]
 
     # Retrieving all the influencers
     response = requests.get(influencers_api_url)
@@ -53,6 +56,7 @@ def add_campaign():
         desc = request.form.get("description")
         budget = int(request.form.get("budget"))
         visibility = request.form.get("campaign_visibility")
+        sponsor_id = current_user.id
 
         try:
             startDate = datetime.fromisoformat(request.form.get("startDate"))
@@ -73,7 +77,7 @@ def add_campaign():
             flash("Enter proper dates!", category='error')
             return redirect(url_for("sponsor.add_campaign"))
 
-        new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget, visibility=visibility)
+        new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget, visibility=visibility, sponsor_id=sponsor_id)
 
         db.session.add(new_campaign)
         db.session.commit()
@@ -316,6 +320,7 @@ def create_ad(id):
 
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
+    allCampaigns = [campaign for campaign in allCampaigns if campaign['sponsor_id'] == current_user.id]
 
     response = requests.get(influencers_api_url + f"/{id}")
     influencers = response.json()

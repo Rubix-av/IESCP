@@ -38,11 +38,12 @@ def login():
         if rank == "1":
             influencer = Influencers.query.filter_by(email=email).first()
 
-            if influencer.flagged == "True":
-                flash("Login failed! You were flagged by admin", category='error')
-                return redirect(url_for("auth.login"))
-
             if influencer:
+
+                if influencer.flagged == "True":
+                    flash("Login failed! You were flagged by admin", category='error')
+                    return redirect(url_for("auth.login"))
+
                 if check_password_hash(influencer.password, password):
                     login_user(influencer, remember=True)
                     flash("Login successfull!", category='success')
@@ -56,12 +57,13 @@ def login():
         
         if rank == "2":
             sponsor = Sponsors.query.filter_by(email=email).first()
-
-            if sponsor.flagged == "True":
-                flash("Login failed! You were flagged by admin", category='error')
-                return redirect(url_for("auth.login"))
                 
             if sponsor:
+
+                if sponsor.flagged == "True":
+                    flash("Login failed! You were flagged by admin", category='error')
+                    return redirect(url_for("auth.login"))
+
                 if check_password_hash(sponsor.password, password):
                     login_user(sponsor, remember=True)
                     flash("Login successfull!", category='success')

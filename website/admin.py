@@ -12,7 +12,23 @@ sponsors_api_url = "http://127.0.0.1:8000/api/sponsor"
 
 @admin.route("/admin-profile")
 def admin_profile():
-    return render_template("admin_pages/admin-profile.html", user=current_user)
+
+    # Retrieving all the campaigns
+    response = requests.get(campaigns_api_url)
+    allCampaigns = response.json()
+    allCampaigns = [campaign for campaign in allCampaigns if campaign['flagged'] == "True"]
+
+    # Retrieving all the influencers
+    response = requests.get(influencers_api_url)
+    allInfluencers = response.json()
+    allInfluencers = [influencer for influencer in allInfluencers if influencer['flagged'] == "True"]
+
+    # Retrieving all the sponsors
+    response = requests.get(sponsors_api_url)
+    allSponsors = response.json()
+    allSponsors = [sponsor for sponsor in allSponsors if sponsor['flagged'] == "True"]
+
+    return render_template("admin_pages/admin-profile.html", user=current_user, allCampaigns=allCampaigns, allInfluencers=allInfluencers, allSponsors=allSponsors)
 
 @admin.route("/admin-find")
 def admin_find():
@@ -278,8 +294,6 @@ def filter_sponsors():
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("admin.admin_find"))
 
-
-
 @admin.route("/flag-campaign/<int:id>")
 @login_required
 def flag_campaign(id):
@@ -292,6 +306,17 @@ def flag_campaign(id):
     flash("Campaign flagged successfully", category='success')
     return redirect(url_for("admin.admin_find"))
 
+@admin.route("/unflag-campaign/<int:id>")
+@login_required
+def unflag_campaign(id):
+
+    campaign = Campaigns.query.filter_by(id=id).first()
+    campaign.flagged = "False"
+    db.session.add(campaign)
+    db.session.commit()
+
+    flash("Flag removed successfully", category='success')
+    return redirect(url_for("admin.admin_profile"))
 
 @admin.route("/flag-influencer/<int:id>")
 @login_required
@@ -305,6 +330,18 @@ def flag_influencer(id):
     flash("Influencer flagged successfully", category='success')
     return redirect(url_for("admin.admin_find"))
 
+@admin.route("/unflag-influencer/<int:id>")
+@login_required
+def unflag_influencer(id):
+    
+    influencer = Influencers.query.filter_by(id=id).first()
+    influencer.flagged = "False"
+    db.session.add(influencer)
+    db.session.commit()
+
+    flash("Flag removed successfully", category='success')
+    return redirect(url_for("admin.admin_profile"))
+
 @admin.route("/flag-sponsor/<int:id>")
 @login_required
 def flag_sponsor(id):
@@ -316,4 +353,16 @@ def flag_sponsor(id):
 
     flash("Sponsor flagged successfully", category='success')
     return redirect(url_for("admin.admin_find"))
+
+@admin.route("/unflag-sponsor/<int:id>")
+@login_required
+def unflag_sponsor(id):
+    
+    sponsor = Sponsors.query.filter_by(id=id).first()
+    sponsor.flagged = "False"
+    db.session.add(sponsor)
+    db.session.commit()
+
+    flash("Flag removed successfully", category='success')
+    return redirect(url_for("admin.admin_profile"))
 
