@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
 from .model import db, Campaigns, Influencers, Ad_request
+from . import niches_list
 from datetime import datetime
 import requests
 
@@ -9,13 +10,17 @@ sponsor = Blueprint("sponsor", __name__)
 # API url
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 influencers_api_url = "http://127.0.0.1:8000/api/influencer"
-
+ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
 
 # Sponsor Routes
 @sponsor.route("/sponsor-profile")
 @login_required
 def sponsor_profile():
-    return render_template("sponsor_pages/sponsor-profile.html", user=current_user)
+
+    response = requests.get(ad_request_api_url)
+    allAds = response.json()
+
+    return render_template("sponsor_pages/sponsor-profile.html", user=current_user, allAds=allAds)
 
 @sponsor.route("/sponsor-campaigns")
 @login_required
@@ -310,8 +315,9 @@ def create_ad(id):
         payment_amount = request.form.get("payment_amt")
         campaign_id = int(request.form.get("select_campaign"))
         influencer_id = id
+        sponsor_id = current_user.id
 
-        new_ad = Ad_request(messages=messages, requirenments=requirenments, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id)
+        new_ad = Ad_request(messages=messages, requirenments=requirenments, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id, sponsor_id=sponsor_id)
         db.session.add(new_ad)
         db.session.commit()
 

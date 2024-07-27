@@ -32,7 +32,7 @@ sponsor_fields = {
     "id": fields.Integer,
     "email": fields.String,
     "username": fields.String,
-    "industry": fields.String,
+    "niche": fields.String,
     "budget": fields.Integer,
     "rank": fields.Integer,
     "flagged": fields.String,
@@ -46,6 +46,7 @@ ad_request_fields = {
     "status": fields.String,
     "influencer_id": fields.Integer,
     "campaign_id": fields.Integer,
+    "sponsor_id": fields.Integer,
 }
 
 # Request parser for campaigns
@@ -73,7 +74,7 @@ influencers_parser.add_argument("flagged", type=str, help="Flagged is required",
 sponsors_parser = reqparse.RequestParser()
 sponsors_parser.add_argument("email", type=str, help="Email is required", required=True)
 sponsors_parser.add_argument("username", type=str, help="Username is required", required=True)
-sponsors_parser.add_argument("industry", type=str, help="Industry is required", required=True)
+sponsors_parser.add_argument("niche", type=str, help="Niche is required", required=True)
 sponsors_parser.add_argument("budget", type=int, help="Budget is required", required=True)
 sponsors_parser.add_argument("rank", type=int, help="Rank is required", required=True)
 sponsors_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
@@ -84,8 +85,9 @@ adRequest_parser.add_argument("messages", type=str, help="Messages is required",
 adRequest_parser.add_argument("requirenments", type=str, help="Requirenments is required", required=True)
 adRequest_parser.add_argument("payment_amount", type=int, help="Payment Amount is required", required=True)
 adRequest_parser.add_argument("status", type=str, help="Status is required", required=False)
-adRequest_parser.add_argument("influencer_id", type=int, help="Influenecer id is required", required=True)
+adRequest_parser.add_argument("influencer_id", type=int, help="Influencer id is required", required=True)
 adRequest_parser.add_argument("campaign_id", type=int, help="Campaign id is required", required=True)
+adRequest_parser.add_argument("sponsor_id", type=int, help="Sponsor id is required", required=True)
 
 class Campaigns_API(Resource):
     @marshal_with(campaign_fields)

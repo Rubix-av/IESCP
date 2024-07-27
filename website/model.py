@@ -20,10 +20,9 @@ class Influencers(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String(100), nullable=False)
     niche = db.Column(db.String(100), nullable=False)
-    followers = db.Column(db.Integer, nullable=False)
     reach = db.Column(db.Integer)
+    image = db.Column(db.String(200))
     platform_preference = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     rank = db.Column(db.Integer, default=1, nullable=False)
@@ -39,7 +38,7 @@ class Sponsors(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
-    industry = db.Column(db.String(150), nullable=False)
+    niche = db.Column(db.String(150), nullable=False)
     budget = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(50), nullable=False)
     rank = db.Column(db.Integer, default=2, nullable=False)
@@ -59,6 +58,7 @@ class Ad_request(db.Model, UserMixin):
     status = db.Column(db.String(50), default="Pending", nullable=False)
     influencer_id = db.Column(db.Integer, db.ForeignKey("influencers.id"))
     campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
+    sponsor_id = db.Column(db.Integer, db.ForeignKey("sponsors.id"))
 
     def get_id(self):
         return f"ad_request-{self.id}"

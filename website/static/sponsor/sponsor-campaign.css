@@ -44,7 +44,7 @@
   
   /* Edit button styles */
   .edit-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50 !important; /* Green */
   }
   
   .edit-button:hover {
@@ -53,7 +53,7 @@
   
   /* Delete button styles */
   .delete-button {
-    background-color: #f44336; /* Red */
+    background-color: #f44336 !important; /* Red */
   }
   
   .delete-button:hover {

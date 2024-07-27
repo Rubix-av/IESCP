@@ -21,6 +21,35 @@ p{
     margin-top: 20px;
     width: 140px;
 }
-.twitterColor{
-    background-color: black;
+
+.btn-check:checked + .btn-outline-danger {
+    background-color: #FF0000; /* YouTube Red */
+    color: white;
+}
+.btn-check:checked + .btn-outline-info {
+    background-color: #1DA1F2; /* Twitter Blue */
+    color: white;
+}
+.btn-check:checked + .btn-outline-primary {
+    background-color: #C13584; /* Instagram Gradient Color */
+    color: white;
+}
+.btn-check:checked + .btn-outline-danger:hover,
+.btn-check:checked + .btn-outline-info:hover,
+.btn-check:checked + .btn-outline-primary:hover {
+    opacity: 0.8; /* Slightly reduce opacity on hover */
+}
+.btn-outline-danger,
+.btn-outline-info,
+.btn-outline-primary {
+    border: 2px solid transparent;
+}
+.btn-outline-danger {
+    border-color: #FF0000; /* YouTube Red */
+}
+.btn-outline-info {
+    border-color: #1DA1F2; /* Twitter Blue */
+}
+.btn-outline-primary {
+    border-color: #C13584; /* Instagram Gradient Color */
 }

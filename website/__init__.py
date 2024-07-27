@@ -7,11 +7,16 @@ from flask_restful import Api
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
+niches_list = ["Technology", "Fashion", "Automotive", "Sports", "Gaming", "Health", "Science", "Travel", "Finance", "Food and Beverage", "Gardening", "Entertainment", "Education"]
+
+
 def create_app():
     app = Flask(__name__)
     api = Api(app)
     app.config['SECRET_KEY'] = "dsakfhaosjbdjvbakshefkdsafaseh"
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
+    app.config['UPLOAD_FOLDER'] = 'website/static/uploads/'
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
     db.init_app(app)
 
     # initializing logging variables

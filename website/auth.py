@@ -1,9 +1,15 @@
-from flask import Blueprint, render_template, request, url_for, redirect, flash
+from flask import Blueprint, render_template, request, url_for, redirect, flash, current_app as app
 from flask_login import login_user, login_required, logout_user, current_user
 from .model import db, Sponsors, Influencers, Admins
+from . import niches_list
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
 
 auth = Blueprint("auth", __name__)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # User Login
 @auth.route("/login", methods=["GET","POST"])
@@ -92,7 +98,7 @@ def sponsor_register():
     if request.method == "POST":
         email = request.form.get("email").lower()
         username = request.form.get("username")
-        industry = request.form.get("industry")
+        niche = request.form.get("user_niche")
         budget = int(request.form.get("budget"))
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
@@ -109,7 +115,7 @@ def sponsor_register():
             flash("You need to add some budget", category='error')
             return redirect(url_for("auth.sponsor_register"))
         else:
-            new_sponsor = Sponsors(email=email, username=username, industry=industry, budget=budget, password=generate_password_hash(password1))
+            new_sponsor = Sponsors(email=email, username=username, niche=niche, budget=budget, password=generate_password_hash(password1))
             
             db.session.add(new_sponsor)
             db.session.commit()
@@ -119,11 +125,12 @@ def sponsor_register():
             return redirect(url_for("sponsor.sponsor_profile"))
             
 
-    return render_template("sponsor_pages/sponsor-register.html", user=current_user)
+    return render_template("sponsor_pages/sponsor-register.html", user=current_user, allNiches=niches_list)
 
 # Influencer Register
 @auth.route("/influencer-register", methods=["GET","POST"])
 def influencer_register():
+
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
         return redirect(url_for("influencer.influencer_profile"))
@@ -131,12 +138,29 @@ def influencer_register():
     if request.method == "POST":
         email = request.form.get("email").lower()
         username = request.form.get("username")
-        category = request.form.get("category")
-        niche = request.form.get("niche")
-        followers = request.form.get("followers")
+        niche = request.form.get("user_niche")
+        reach = request.form.get("reach")
+        image = request.form.get("image")
         platform_preference = request.form.get("social")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
+
+        # Handle file upload
+        if 'image' not in request.files:
+            flash("No image file provided", category='error')
+            return redirect(url_for("auth.influencer_register"))
+        
+        file = request.files['image']
+        if file.filename == '':
+            flash("No selected file", category='error')
+            return redirect(url_for("auth.influencer_register"))
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            flash("Invalid file type", category='error')
+            return redirect(url_for("auth.influencer_register"))
 
         influencer = Influencers.query.filter_by(email=email).first()
 
@@ -147,7 +171,7 @@ def influencer_register():
             flash("Incorrect password!", category='error')
             return redirect(url_for("auth.influencer_register"))
         else:
-            new_influencer = Influencers(email=email, username=username, category=category, niche=niche, followers=followers, password=generate_password_hash(password1), platform_preference=platform_preference)
+            new_influencer = Influencers(email=email, username=username, reach=reach, niche=niche, password=generate_password_hash(password1), platform_preference=platform_preference, image=filename)
             
             db.session.add(new_influencer)
             db.session.commit()
@@ -156,7 +180,7 @@ def influencer_register():
             flash("Influencer created successfully", category='success')
             return redirect(url_for("influencer.influencer_profile"))
         
-    return render_template("influencer_pages/influencer-register.html", user=current_user)
+    return render_template("influencer_pages/influencer-register.html", user=current_user, allNiches=niches_list)
 
 # Admin Register
 @auth.route("/admin-register", methods=["GET","POST"])
