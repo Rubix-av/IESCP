@@ -13,6 +13,7 @@ campaign_fields = {
     "visibility": fields.String,
     "flagged": fields.String,
     "sponsor_id": fields.Integer,
+    "niche": fields.String,
 }
 
 influencer_fields = {
@@ -57,6 +58,7 @@ campaigns_parser.add_argument("budget", type=int, help="Budget is required", req
 campaigns_parser.add_argument("visibility", type=str, help="Visibility is required", required=False)
 campaigns_parser.add_argument("flagged", type=str, help="Flagged is required", required=True)
 campaigns_parser.add_argument("sponsor_id", type=int, help="Sponsor id is required", required=True)
+campaigns_parser.add_argument("niche", type=str, help="Niche is required", required=False)
 
 # Request parser for influencers
 influencers_parser = reqparse.RequestParser()

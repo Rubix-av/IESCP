@@ -17,29 +17,42 @@
         <label for="username">Username : </label>
       </div>
       
-      <select class="form-select form-floating mb-4" aria-label="Default select example" name="user_niche" required>
-
-        {% for niche in allNiches %}
-          <option value="{{niche}}">{{niche}}</option>
-        {% endfor %}
-
-        <option selected disabled>Select Niche</option>
-      </select>
-        
-      <div class="form-floating mb-4">
-        <input type="number" id="budget" name="budget" placeholder="Enter Budget" class="form-control">
-        <label for="budget">Budget : </label>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <select class="form-select" aria-label="Default select example" name="user_niche" required>
+              {% for niche in allNiches %}
+                <option value="{{niche}}">{{niche}}</option>
+              {% endfor %}
+              <option selected disabled>Select Niche</option>
+            </select>
+            <label for="user_niche">Select Niche</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" id="budget" name="budget" placeholder="Enter Budget" class="form-control">
+            <label for="budget">Budget:</label>
+          </div>
+        </div>
       </div>
       
-      <div class="form-floating mb-3">
-        <input type="password" id="password1" name="password1" placeholder="Enter Password" class="form-control">
-        <label type="password">Password : </label>
+      
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" id="password1" name="password1" placeholder="Enter Password" class="form-control">
+            <label for="password1">Password:</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" id="password2" name="password2" placeholder="Confirm Password" class="form-control">
+            <label for="password2">Confirm Password:</label>
+          </div>
+        </div>
       </div>
       
-      <div class="form-floating mb-3">
-        <input type="password" id="password2" name="password2" placeholder="Confirm Password" class="form-control">
-        <label type="password">Confirm Password : </label>
-      </div>
 
       <button class="btn btn-primary" type="submit" id="login">Register</button>
   </form>

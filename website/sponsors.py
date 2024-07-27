@@ -62,6 +62,7 @@ def add_campaign():
         budget = int(request.form.get("budget"))
         visibility = request.form.get("campaign_visibility")
         sponsor_id = current_user.id
+        niche = request.form.get("campaign_niche")
 
         try:
             startDate = datetime.fromisoformat(request.form.get("startDate"))
@@ -82,14 +83,14 @@ def add_campaign():
             flash("Enter proper dates!", category='error')
             return redirect(url_for("sponsor.add_campaign"))
 
-        new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget, visibility=visibility, sponsor_id=sponsor_id)
+        new_campaign = Campaigns(title=title, description=desc, start_date=startDate, end_date=endDate, budget=budget, visibility=visibility, sponsor_id=sponsor_id, niche=niche)
 
         db.session.add(new_campaign)
         db.session.commit()
 
         return redirect(url_for("sponsor.sponsor_campaigns"))
 
-    return render_template("sponsor_pages/add-campaign.html", user=current_user)
+    return render_template("sponsor_pages/add-campaign.html", user=current_user, allNiches=niches_list)
 
 @sponsor.route("delete-campaign/<int:id>")
 @login_required

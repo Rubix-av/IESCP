@@ -1,4 +1,5 @@
-{% extends "view.html" %} {% block title %}Add Campaigns{% endblock %}
+{% extends "view.html" %} 
+{% block title %}Add Campaigns{% endblock %}
 
 {% block view_content %}
 <br><h1 class="fw-bold" align="center">Create Campaign</h1> <br>
@@ -19,12 +20,30 @@
       <label for="budget">Budget</label>
     </div>
 
-    <select class="form-select form-floating mb-4" aria-label="Default select example" name="campaign_visibility" required>
-      <option value="Public">Public</option>
-      <option value="Private">Private</option>
-      <option selected disabled>Campaign visibility</option>
-    </select>
-      
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="form-floating">
+          <select class="form-select" id="campaign_visibility" aria-label="Default select example" name="campaign_visibility" required>
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+            <option selected disabled>Campaign visibility</option>
+          </select>
+          <label for="campaign_visibility">Campaign Visibility</label>
+        </div>
+      </div>
+      <div class="col-md-6" id="nicheSelectContainer" style="display: none;">
+        <div class="form-floating">
+          <select class="form-select" aria-label="Default select example" name="campaign_niche" required>
+            {% for niche in allNiches %}
+              <option value="{{niche}}">{{niche}}</option>
+            {% endfor %}
+            <option selected disabled>Select Niche</option>
+          </select>
+          <label for="campaign_niche">Select Niche</label>
+        </div>
+      </div>
+    </div>
+    
     <div class="form-floating mb-4">
       <input type="date" id="startDate" name="startDate" placeholder="Enter Start Date" class="form-control">
       <label for="startDate">Start Date</label>
@@ -36,4 +55,15 @@
     </div>
     <button class="btn btn-primary fw-bold" type="submit" id="login">Add</button>
 </form>
+
+<script>
+  document.getElementById('campaign_visibility').addEventListener('change', function() {
+    var nicheSelectContainer = document.getElementById('nicheSelectContainer');
+    if (this.value === 'Private') {
+      nicheSelectContainer.style.display = 'block';
+    } else {
+      nicheSelectContainer.style.display = 'none';
+    }
+  });
+</script>
 {% endblock %}

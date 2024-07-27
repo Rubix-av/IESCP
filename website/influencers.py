@@ -26,7 +26,7 @@ def influencer_find():
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
 
-    allCampaigns = [campaign for campaign in allCampaigns if campaign.get('visibility') == 'Public']
+    allCampaigns = [campaign for campaign in allCampaigns if campaign.get('visibility') == 'Public' or (campaign.get('visibility') == 'Private' and campaign.get('niche') == current_user.niche)]
 
     return render_template("influencer_pages/influencer-find.html", user=current_user, allCampaigns=allCampaigns)
 

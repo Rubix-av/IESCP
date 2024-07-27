@@ -71,6 +71,7 @@ class Campaigns(db.Model, UserMixin):
     description = db.Column(db.String(200), nullable=False)
     start_date = db.Column(Date, nullable=False)
     end_date = db.Column(Date, nullable=False)
+    niche = db.Column(db.String(150), nullable=True)
     budget = db.Column(db.Integer, nullable=False)
     visibility = db.Column(db.String(50), default="Public", nullable=False)
     flagged = db.Column(db.String(10), default="False", nullable=False)
