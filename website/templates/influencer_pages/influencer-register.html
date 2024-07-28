@@ -58,16 +58,15 @@
       </div>
 
       <p><strong>Platform Presence</strong></p>
-      <div class="btn-group" role="group" aria-label="Basic example">
-        <input type="radio" class="btn-check" name="social" id="youtube" autocomplete="off" checked>
-        <label class="btn btn-outline-danger fw-bold" for="youtube">YouTube</label>
+      <div class="w-50">
+        <select class="form-select" aria-label="Default select example" name="social" required>
+          <option value="YouTube">YouTube</option>
+          <option value="Twitter">Twitter</option>
+          <option value="Instagram">Instagram</option>
+          <option selected disabled>Select Niche</option>
+        </select>
+      </div>
       
-        <input type="radio" class="btn-check" name="social" id="twitter" autocomplete="off">
-        <label class="btn btn-outline-info fw-bold" for="twitter">Twitter</label>
-      
-        <input type="radio" class="btn-check" name="social" id="insta" autocomplete="off">
-        <label class="btn btn-outline-primary fw-bold" for="insta">Instagram</label>      
-      </div><br>
         <button class="btn btn-primary fw-bold" type="submit" id="register">Register</button>
   </form>
 </div>

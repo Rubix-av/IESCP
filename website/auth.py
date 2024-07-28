@@ -139,9 +139,11 @@ def influencer_register():
         email = request.form.get("email").lower()
         username = request.form.get("username")
         niche = request.form.get("user_niche")
+        print(niche)
         reach = request.form.get("reach")
         image = request.form.get("image")
         platform_preference = request.form.get("social")
+        print(platform_preference)
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
 
@@ -167,8 +169,11 @@ def influencer_register():
         if influencer:
             flash("Influencer already exists!", category='error')
             return redirect(url_for("auth.login"))
-        elif password1 != password2:
+        if password1 != password2:
             flash("Incorrect password!", category='error')
+            return redirect(url_for("auth.influencer_register"))
+        if not platform_preference:
+            flash("Select a platform!", category='error')
             return redirect(url_for("auth.influencer_register"))
         else:
             new_influencer = Influencers(email=email, username=username, reach=reach, niche=niche, password=generate_password_hash(password1), platform_preference=platform_preference, image=filename)

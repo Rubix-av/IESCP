@@ -43,11 +43,12 @@ def create_app():
     create_database(app)
 
     # API end points
-    from .api import Campaigns_API, Influencers_API, Sponsors_API, Ad_Request_API
+    from .api import Campaigns_API, Influencers_API, Sponsors_API, Ad_Request_API, Completed_Campaigns_API
     api.add_resource(Campaigns_API, "/api/campaign/<int:id>", "/api/campaign")
     api.add_resource(Influencers_API, "/api/influencer/<int:id>", "/api/influencer")
     api.add_resource(Sponsors_API, "/api/sponsor/<int:id>", "/api/sponsor")
     api.add_resource(Ad_Request_API, "/api/ad_request/<int:id>", "/api/ad_request")
+    api.add_resource(Completed_Campaigns_API, "/api/completed_campaign/<int:id>", "/api/completed_campaign")
 
     # user loader for login manager
     @login_manager.user_loader

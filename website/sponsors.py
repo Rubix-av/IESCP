@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
-from .model import db, Campaigns, Influencers, Ad_request
+from .model import db, Campaigns, Influencers, Ad_request, Sponsors, Completed_Campaigns
 from . import niches_list
 from datetime import datetime
 import requests
@@ -11,6 +11,7 @@ sponsor = Blueprint("sponsor", __name__)
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 influencers_api_url = "http://127.0.0.1:8000/api/influencer"
 ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
+completed_campaign_api_url = "http://127.0.0.1:8000/api/completed_campaign"
 
 # Sponsor Routes
 @sponsor.route("/sponsor-profile")
@@ -20,7 +21,13 @@ def sponsor_profile():
     response = requests.get(ad_request_api_url)
     allAds = response.json()
 
-    return render_template("sponsor_pages/sponsor-profile.html", user=current_user, allAds=allAds)
+    response = requests.get(influencers_api_url)
+    allInfluencers = response.json()
+
+    response = requests.get(completed_campaign_api_url)
+    allCompletedCampaigns = response.json()
+
+    return render_template("sponsor_pages/sponsor-profile.html", user=current_user, allAds=allAds, allInfluencers=allInfluencers, allCompletedCampaigns=allCompletedCampaigns)
 
 @sponsor.route("/sponsor-campaigns")
 @login_required
@@ -309,16 +316,17 @@ def campaign_view(id):
 
 @sponsor.route("create-ad/<int:id>", methods=["GET","POST"])
 def create_ad(id):
+    
     if request.method == "POST":
         
         messages = request.form.get("message")
-        requirenments = request.form.get("requirements")
+        requirements = request.form.get("requirements")
         payment_amount = request.form.get("payment_amt")
         campaign_id = int(request.form.get("select_campaign"))
         influencer_id = id
         sponsor_id = current_user.id
 
-        new_ad = Ad_request(messages=messages, requirenments=requirenments, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id, sponsor_id=sponsor_id)
+        new_ad = Ad_request(messages=messages, requirements=requirements, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id, sponsor_id=sponsor_id)
         db.session.add(new_ad)
         db.session.commit()
 
@@ -337,3 +345,34 @@ def create_ad(id):
         return redirect(url_for("sponsor.sponsor_find"))
 
     return render_template("ad_request/create_ad.html", user=current_user, id=id, allCampaigns=allCampaigns, influencers=influencers)
+
+@sponsor.route("confirm-completion/<int:id>")
+def confirm_completion(id):
+    ad_completion_confirmed = Ad_request.query.filter_by(id=id).first()
+    campaign_completion_confirmed = Campaigns.query.filter_by(id=ad_completion_confirmed.campaign_id).first()
+    sponsor =  Sponsors.query.filter_by(id=ad_completion_confirmed.sponsor_id).first()
+    influencer = Influencers.query.filter_by(id=ad_completion_confirmed.influencer_id).first()
+    
+    completed_campaign_id = ad_completion_confirmed.campaign_id
+    completed_campaign_title = campaign_completion_confirmed.title
+    completed_campaign_desc = campaign_completion_confirmed.description
+    completed_campaign_niche = campaign_completion_confirmed.niche
+    completed_campaign_sponsor_name = sponsor.username
+    completed_campaign_transaction_amt = ad_completion_confirmed.payment_amount
+    completed_campaign_sponsor_id = sponsor.id
+
+    new_complete_campaign = Completed_Campaigns(id=completed_campaign_id, sponsor_name=completed_campaign_sponsor_name, title=completed_campaign_title, description=completed_campaign_desc, niche=completed_campaign_niche, transaction_amount=completed_campaign_transaction_amt, sponsor_id=completed_campaign_sponsor_id)
+
+    influencer.balance += ad_completion_confirmed.payment_amount
+    db.session.add(influencer)
+    db.session.add(new_complete_campaign)
+    db.session.delete(ad_completion_confirmed)
+    db.session.commit()
+
+    # influencer = Influencers.query.filter_by(id=ad_completion_confirmed.influencer_id).first()
+    flash("Campaign successfull", category='success')
+    return redirect(url_for("sponsor.sponsor_profile"))
+
+
+    
+

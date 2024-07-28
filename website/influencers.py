@@ -9,16 +9,23 @@ influencer = Blueprint("influencer", __name__)
 # Campaings API URL
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
+sponsor_api_url = "http://127.0.0.1:8000/api/sponsor"
 
 @influencer.route("/influencer-profile")
 @login_required
 def influencer_profile():
     response = requests.get(ad_request_api_url)
     allAds = response.json()
+    
+    response = requests.get(campaigns_api_url)
+    allCampaigns = response.json()
+    
+    response = requests.get(sponsor_api_url)
+    allSponsors = response.json()
 
     allAds = [ad for ad in allAds if ad.get('influencer_id') == current_user.id]
 
-    return render_template("influencer_pages/influencer-profile.html", user=current_user, allAds=allAds)
+    return render_template("influencer_pages/influencer-profile.html", user=current_user, allAds=allAds, allCampaigns=allCampaigns, allSponsors=allSponsors)
 
 @influencer.route("/influencer-find")
 @login_required
@@ -133,3 +140,20 @@ def accept_ad(id):
 
     flash("Ad accepted successfully", category='success')
     return redirect(url_for("influencer.influencer_profile"))
+
+@influencer.route("complete-campaign/<int:id>")
+@login_required
+def complete_campaign(id):
+
+    ad_completed = Ad_request.query.filter_by(id=id).first()
+
+    ad_completed.completed = "True"
+    db.session.add(ad_completed)
+    db.session.commit()
+
+    flash("Campaign Completed", category='success')
+    return redirect(url_for("influencer.influencer_profile"))
+
+    
+
+

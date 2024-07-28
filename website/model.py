@@ -21,6 +21,7 @@ class Influencers(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     niche = db.Column(db.String(100), nullable=False)
+    balance = db.Column(db.Integer, default=0, nullable=False)
     reach = db.Column(db.Integer)
     image = db.Column(db.String(200))
     platform_preference = db.Column(db.String(50), nullable=False)
@@ -53,9 +54,10 @@ class Ad_request(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     messages = db.Column(db.String(150), nullable=False)
-    requirenments = db.Column(db.String(150), nullable=False)
+    requirements = db.Column(db.String(150), nullable=False)
     payment_amount = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(50), default="Pending", nullable=False)
+    completed = db.Column(db.String(10), default="False", nullable=False)
     influencer_id = db.Column(db.Integer, db.ForeignKey("influencers.id"))
     campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
     sponsor_id = db.Column(db.Integer, db.ForeignKey("sponsors.id"))
@@ -80,3 +82,17 @@ class Campaigns(db.Model, UserMixin):
 
     def get_id(self):
         return f"campaigns-{self.id}"
+
+class Completed_Campaigns(db.Model, UserMixin):
+    __tablename__ = "completed_campaigns"
+
+    id = db.Column(db.Integer, primary_key=True)
+    sponsor_name = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(200), nullable=False)
+    niche = db.Column(db.String(150), default="None", nullable=True)
+    transaction_amount = db.Column(db.Integer, nullable=False)
+    sponsor_id = db.Column(db.Integer, nullable=False)
+
+    def get_id(self):
+        return f"completed_campaigns-{self.id}"

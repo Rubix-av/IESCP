@@ -4,103 +4,104 @@
 
 {% set count = namespace(value=0) %}
 {% set enterOnce = namespace(value="False") %}
+  
 
+<!-- Active Campaigns -->
 <div class="container mt-4">
+        {% set count.value = count.value + 1 %}
+        {% set enterOnce.value = "True" %}
+        <div class="container mt-5">
+          <h2 class="fw-bold">Active Campaigns</h2>
+          <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                  <thead class="thead-dark">
+                      <tr>
+                          <th>#</th>
+                          <th>Influencer</th>
+                          <th>Message</th>
+                          <th>Requirements</th>
+                          <th>Payment</th>
+                          <th>Status</th>
+                          <th>Completion</th>
+                      </tr>
+                  </thead>
+                  <tbody style="font-size: 17px">
+                      {% for ad in allAds %}
+                        {% if user.id == ad.sponsor_id %}
+                      <tr>
+                          <th scope="row">{{loop.index}}</th>
+                          <td>
+                            {% for influencer in allInfluencers %}
+                              {% if influencer.id == ad.influencer_id %}
+                                {{influencer.username}}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                          <td>{{ad.messages}}</td>
+                          <td>{{ad.requirements}}</td>
+                          <td>{{ad.payment_amount}}</td>
+                          {% if ad.status == "Pending" %}
+                            <td class="text-warning fw-bold">{{ad.status}}</td>
+                          {% elif ad.status == "Rejected" %}
+                            <td class="text-danger fw-bold">{{ad.status}}</td>
+                          {% else %}
+                            <td class="text-success fw-bold">{{ad.status}}</td>
+                          {% endif %}
+                          
+                          {% if ad.completed == "False" %}
+                            <td class="text-warning fw-bold">Ongoing</td>
+                          {% else %}
+                            <td>
+                              <a class="text-success fw-bold btn" href="confirm-completion/{{ad.id}}">
+                                Done <i class="fas fa-check text-success"></i>
+                              </a>
+                            </td>
+                          {% endif %}
+                      </tr>
+                        {% endif %}
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
 
-    <div class="mt-5 d-flex align-items-center justify-content-between">
-        <h2 class="flex-shrink-0 fw-bold fs-2">
-            Active Campaigns
-        </h2>
-    </div>
+</div>
 
-    {% for ad in allAds %}
-
-        {% if campaign.sponsor_id == add.id %}
-        <div class="mt-2 campaign-row">
-            <span>{{ ad.id }} | {{ ad.payment_amount }}</span>
-            <div>
-                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#ad-view-{{ad.id}}">View</button>
-                <div class="modal fade" id="ad-view-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ ad.message }}</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <h4>Description</h4>
-                          {{ ad.description }}
-                          <hr>
-                          <h4>Budget</h4>
-                          {{ ad.budget }}
-                          <hr>
-                          <h4>Start Date</h4>
-                          {{ ad.start_date }}
-                          <hr>
-                          <h4>End Date</h4>
-                          {{ ad.end_date }}
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-    
-                <button class="btn btn-outline-success btn-request" data-bs-toggle="modal" data-bs-target="#ad-accept-{{ad.id}}">Accept</button>
-
-                <button class="btn btn-outline-danger btn-request" data-bs-toggle="modal" data-bs-target="#ad-reject-{{ad.id}}">
-                  Reject
-                </button>
-
-                <!-- Ad Request Reject Modal -->
-                <div class="modal fade" id="ad-reject-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        Are you sure you want to <span class="text-danger fw-bold">reject</span> this <strong>Ad Request</strong>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
-                        <a href="reject-ad/{{ad.id}}" class="btn btn-danger fw-bold">Confirm</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Ad Accept Reject Modal -->
-                <div class="modal fade" id="ad-accept-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        Are you sure you want to <span class="text-success fw-bold">accept</span> this <strong>Ad Request</strong>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
-                        <a href="accept-ad/{{ad.id}}" class="btn btn-success fw-bold">Accept</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
-v         {% endif %}
-
-    {% endfor %}
-
-    {% if (allAds|length == 0) or (enterOnce.value == "False") %}
-    <div class="alert alert-warning text-center fs-3 mt-4">
-      <span><strong>No Active Campaigns</strong></span>
-    </div>
-    {% endif %}
+<!-- Completed Campaigns -->
+<div class="container mt-4">
+        {% set count.value = count.value + 1 %}
+        {% set enterOnce.value = "True" %}
+        <div class="container mt-5">
+          <h2 class="fw-bold">Completed Campaigns</h2>
+          <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                  <thead class="thead-dark">
+                      <tr>
+                          <th>#</th>
+                          <th>Sponsor</th>
+                          <th>Title</th>
+                          <th>Description</th>
+                          <th>Niche</th>
+                          <th>Transaction Amount</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for complete_campaign in allCompletedCampaigns %}
+                    {% if user.id == complete_campaign.sponsor_id %}
+                  <tr>
+                      <th scope="row">{{loop.index}}</th>
+                      <th>{{complete_campaign.sponsor_name}}</th>
+                      <th>{{complete_campaign.title}}</th>
+                      <th>{{complete_campaign.description}}</th>
+                      <th>{{complete_campaign.niche}}</th>
+                      <th>{{complete_campaign.transaction_amount}}</th>
+                  </tr>
+                    {% endif %}
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
 
 </div>
 

@@ -1,0 +1,23 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.thead-dark th {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: 300;
+    color: #343a40;
+}

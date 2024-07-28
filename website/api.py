@@ -1,6 +1,6 @@
 from flask_restful import Resource, fields, marshal_with, reqparse
 from flask import jsonify
-from .model import db, Campaigns, Influencers, Sponsors, Ad_request
+from .model import db, Campaigns, Influencers, Sponsors, Ad_request, Completed_Campaigns
 
 # Add campaign fields
 campaign_fields = {
@@ -45,8 +45,19 @@ ad_request_fields = {
     "requirenments": fields.String,
     "payment_amount": fields.Integer,
     "status": fields.String,
+    "completed": fields.String,
     "influencer_id": fields.Integer,
     "campaign_id": fields.Integer,
+    "sponsor_id": fields.Integer,
+}
+
+completed_campaign_fields = {
+    "id": fields.Integer,
+    "sponsor_name": fields.String,
+    "title": fields.String,
+    "description": fields.String,
+    "niche": fields.String,
+    "transaction_amount": fields.Integer,
     "sponsor_id": fields.Integer,
 }
 
@@ -87,9 +98,18 @@ adRequest_parser.add_argument("messages", type=str, help="Messages is required",
 adRequest_parser.add_argument("requirenments", type=str, help="Requirenments is required", required=True)
 adRequest_parser.add_argument("payment_amount", type=int, help="Payment Amount is required", required=True)
 adRequest_parser.add_argument("status", type=str, help="Status is required", required=False)
+adRequest_parser.add_argument("completed", type=str, help="Completion status is required", required=False)
 adRequest_parser.add_argument("influencer_id", type=int, help="Influencer id is required", required=True)
 adRequest_parser.add_argument("campaign_id", type=int, help="Campaign id is required", required=True)
 adRequest_parser.add_argument("sponsor_id", type=int, help="Sponsor id is required", required=True)
+
+completed_campaign_parser = reqparse.RequestParser()
+completed_campaign_parser.add_argument("sponsor_name", type=str, help="Sponsor name is required", required=True)
+completed_campaign_parser.add_argument("title", type=str, help="Title is required", required=True)
+completed_campaign_parser.add_argument("description", type=str, help="Description is required", required=True)
+completed_campaign_parser.add_argument("niche", type=str, help="Niche is required", required=False)
+completed_campaign_parser.add_argument("transaction_amount", type=int, help="Payment Amount is required", required=True)
+completed_campaign_parser.add_argument("sponsor_id", type=int, help="Sponsor id is required", required=True)
 
 class Campaigns_API(Resource):
     @marshal_with(campaign_fields)
@@ -171,4 +191,24 @@ class Ad_Request_API(Resource):
         db.session.delete(ad)
         db.session.commit()
 
-    
+class Completed_Campaigns_API(Resource):
+    @marshal_with(completed_campaign_fields)
+    def get(self, id=None):
+        if id:
+            completed_campaign = Completed_Campaigns.query.get(id)
+            if not completed_campaign:
+                return jsonify({"error": f"Campaign id {id} not found"}), 404
+            else:
+                return completed_campaign
+        else:
+            completed_campaign = Completed_Campaigns.query.order_by(Completed_Campaigns.title).all()
+            return completed_campaign
+
+    def delete(self, id):
+        completed_campaign = Completed_Campaigns.query.filter_by(id=id).first()
+        
+        if not completed_campaign:
+            return jsonify({"error": f"Campaign id {id} doesn't exist"})
+
+        db.session.delete(completed_campaign)
+        db.session.commit()            
