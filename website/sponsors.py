@@ -331,7 +331,7 @@ def create_ad(id):
         db.session.commit()
 
         flash("Ad request successfully sent!", category='success')
-        return redirect(url_for("sponsor.sponsor_campaigns"))
+        return redirect(url_for("sponsor.sponsor_find"))
 
     response = requests.get(campaigns_api_url)
     allCampaigns = response.json()
@@ -353,7 +353,7 @@ def confirm_completion(id):
     sponsor =  Sponsors.query.filter_by(id=ad_completion_confirmed.sponsor_id).first()
     influencer = Influencers.query.filter_by(id=ad_completion_confirmed.influencer_id).first()
     
-    completed_campaign_id = ad_completion_confirmed.campaign_id
+    completed_campaign_campaign_id = ad_completion_confirmed.campaign_id
     completed_campaign_title = campaign_completion_confirmed.title
     completed_campaign_desc = campaign_completion_confirmed.description
     completed_campaign_niche = campaign_completion_confirmed.niche
@@ -361,7 +361,7 @@ def confirm_completion(id):
     completed_campaign_transaction_amt = ad_completion_confirmed.payment_amount
     completed_campaign_sponsor_id = sponsor.id
 
-    new_complete_campaign = Completed_Campaigns(id=completed_campaign_id, sponsor_name=completed_campaign_sponsor_name, title=completed_campaign_title, description=completed_campaign_desc, niche=completed_campaign_niche, transaction_amount=completed_campaign_transaction_amt, sponsor_id=completed_campaign_sponsor_id)
+    new_complete_campaign = Completed_Campaigns(campaign_id=completed_campaign_campaign_id, sponsor_name=completed_campaign_sponsor_name, title=completed_campaign_title, description=completed_campaign_desc, niche=completed_campaign_niche, transaction_amount=completed_campaign_transaction_amt, sponsor_id=completed_campaign_sponsor_id)
 
     influencer.balance += ad_completion_confirmed.payment_amount
     db.session.add(influencer)
@@ -370,9 +370,24 @@ def confirm_completion(id):
     db.session.commit()
 
     # influencer = Influencers.query.filter_by(id=ad_completion_confirmed.influencer_id).first()
-    flash("Campaign successfull", category='success')
+    flash("Campaign successfull!", category='success')
+    return redirect(url_for("sponsor.sponsor_profile"))
+
+@sponsor.route("delete-completed-campaign/<int:id>")
+def delete_completed_campaign(id):
+    
+    response = requests.delete(completed_campaign_api_url + f"/{id}")
+
+    flash("Successfully deleted!", category='success')
+    return redirect(url_for("sponsor.sponsor_profile"))
+
+@sponsor.route("delete-ad-request/<int:id>")
+def delete_ad_request(id):
+    
+    response = requests.delete(ad_request_api_url + f"/{id}")
+
+    flash("Successfully deleted!", category='success')
     return redirect(url_for("sponsor.sponsor_profile"))
 
 
-    
 

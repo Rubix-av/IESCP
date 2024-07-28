@@ -49,6 +49,24 @@ class Sponsors(db.Model, UserMixin):
     def get_id(self):
         return f"sponsor-{self.id}"
 
+class Campaigns(db.Model, UserMixin):
+    __tablename__ = "campaigns"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(200), nullable=False)
+    start_date = db.Column(Date, nullable=False)
+    end_date = db.Column(Date, nullable=False)
+    niche = db.Column(db.String(150), nullable=False)
+    budget = db.Column(db.Integer, nullable=False)
+    visibility = db.Column(db.String(50), default="Public", nullable=False)
+    flagged = db.Column(db.String(10), default="False", nullable=False)
+    sponsor_id = db.Column(db.Integer, db.ForeignKey("sponsors.id"))
+    ad_requests = db.relationship("Ad_request", backref="campaigns")
+
+    def get_id(self):
+        return f"campaigns-{self.id}"
+
 class Ad_request(db.Model, UserMixin):
     __tablename__ = "ad_request"
 
@@ -65,24 +83,6 @@ class Ad_request(db.Model, UserMixin):
     def get_id(self):
         return f"ad_request-{self.id}"
 
-class Campaigns(db.Model, UserMixin):
-    __tablename__ = "campaigns"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(200), nullable=False)
-    start_date = db.Column(Date, nullable=False)
-    end_date = db.Column(Date, nullable=False)
-    niche = db.Column(db.String(150), nullable=True)
-    budget = db.Column(db.Integer, nullable=False)
-    visibility = db.Column(db.String(50), default="Public", nullable=False)
-    flagged = db.Column(db.String(10), default="False", nullable=False)
-    sponsor_id = db.Column(db.Integer, db.ForeignKey("sponsors.id"))
-    ad_requests = db.relationship("Ad_request", backref="campaigns")
-
-    def get_id(self):
-        return f"campaigns-{self.id}"
-
 class Completed_Campaigns(db.Model, UserMixin):
     __tablename__ = "completed_campaigns"
 
@@ -92,6 +92,7 @@ class Completed_Campaigns(db.Model, UserMixin):
     description = db.Column(db.String(200), nullable=False)
     niche = db.Column(db.String(150), default="None", nullable=True)
     transaction_amount = db.Column(db.Integer, nullable=False)
+    campaign_id = db.Column(db.Integer, nullable=False)
     sponsor_id = db.Column(db.Integer, nullable=False)
 
     def get_id(self):

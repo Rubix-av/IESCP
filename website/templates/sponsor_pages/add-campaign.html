@@ -31,7 +31,7 @@
           <label for="campaign_visibility">Campaign Visibility</label>
         </div>
       </div>
-      <div class="col-md-6" id="nicheSelectContainer" style="display: none;">
+      <div class="col-md-6" id="nicheSelectContainer">
         <div class="form-floating">
           <select class="form-select" aria-label="Default select example" name="campaign_niche" required>
             {% for niche in allNiches %}
@@ -56,14 +56,4 @@
     <button class="btn btn-primary fw-bold" type="submit" id="login">Add</button>
 </form>
 
-<script>
-  document.getElementById('campaign_visibility').addEventListener('change', function() {
-    var nicheSelectContainer = document.getElementById('nicheSelectContainer');
-    if (this.value === 'Private') {
-      nicheSelectContainer.style.display = 'block';
-    } else {
-      nicheSelectContainer.style.display = 'none';
-    }
-  });
-</script>
 {% endblock %}

@@ -4,3 +4,9 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.centered-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

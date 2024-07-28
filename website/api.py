@@ -42,7 +42,7 @@ sponsor_fields = {
 ad_request_fields = {
     "id": fields.Integer,
     "messages": fields.String,
-    "requirenments": fields.String,
+    "requirements": fields.String,
     "payment_amount": fields.Integer,
     "status": fields.String,
     "completed": fields.String,
@@ -58,6 +58,7 @@ completed_campaign_fields = {
     "description": fields.String,
     "niche": fields.String,
     "transaction_amount": fields.Integer,
+    "campaign_id": fields.Integer,
     "sponsor_id": fields.Integer,
 }
 
@@ -95,7 +96,7 @@ sponsors_parser.add_argument("flagged", type=str, help="Flagged is required", re
 # Request parser for ad_request
 adRequest_parser = reqparse.RequestParser()
 adRequest_parser.add_argument("messages", type=str, help="Messages is required", required=True)
-adRequest_parser.add_argument("requirenments", type=str, help="Requirenments is required", required=True)
+adRequest_parser.add_argument("requirements", type=str, help="Requirement is required", required=True)
 adRequest_parser.add_argument("payment_amount", type=int, help="Payment Amount is required", required=True)
 adRequest_parser.add_argument("status", type=str, help="Status is required", required=False)
 adRequest_parser.add_argument("completed", type=str, help="Completion status is required", required=False)
@@ -109,6 +110,7 @@ completed_campaign_parser.add_argument("title", type=str, help="Title is require
 completed_campaign_parser.add_argument("description", type=str, help="Description is required", required=True)
 completed_campaign_parser.add_argument("niche", type=str, help="Niche is required", required=False)
 completed_campaign_parser.add_argument("transaction_amount", type=int, help="Payment Amount is required", required=True)
+completed_campaign_parser.add_argument("campaign_id", type=int, help="Campaign id is required", required=True)
 completed_campaign_parser.add_argument("sponsor_id", type=int, help="Sponsor id is required", required=True)
 
 class Campaigns_API(Resource):
