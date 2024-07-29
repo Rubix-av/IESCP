@@ -440,4 +440,35 @@ def reject_request(id):
     flash("Ad rejected successfully", category='success')
     return redirect(url_for("sponsor.sponsor_dashboard"))
 
+@sponsor.route("update-request-amt/<int:id>", methods=["GET","POST"])
+def update_request_amt(id):
+    if request.method == "POST":
+        new_request_amt = request.form.get("request_amount")
+        request_ad = Influencer_requests.query.filter_by(id=id).first()
+        request_ad.request_amt = new_request_amt
+
+        db.session.add(request_ad)
+        db.session.commit()
+
+        flash("Request amount updated!", category='success')
+        return redirect(url_for("sponsor.sponsor_dashboard"))
+
+    return redirect(url_for("sponsor.sponsor_profile"))
+
+@sponsor.route("update-ad-amt/<int:id>", methods=["GET","POST"])
+def update_ad_amt(id):
+    if request.method == "POST":
+        new_ad_amt = request.form.get("ad_amt")
+        request_ad = Ad_request.query.filter_by(id=id).first()
+        request_ad.payment_amount = new_ad_amt
+
+        db.session.add(request_ad)
+        db.session.commit()
+
+        flash("Payment amount updated!", category='success')
+        return redirect(url_for("sponsor.sponsor_dashboard"))
+
+    return redirect(url_for("sponsor.sponsor_profile"))
+
+
 

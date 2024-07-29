@@ -10,6 +10,7 @@ influencer = Blueprint("influencer", __name__)
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
 sponsor_api_url = "http://127.0.0.1:8000/api/sponsor"
+inf_request_api_url = "http://127.0.0.1:8000/api/inf_request"
 
 @influencer.route("/influencer-profile")
 @login_required
@@ -28,9 +29,14 @@ def influencer_dashboard():
     response = requests.get(sponsor_api_url)
     allSponsors = response.json()
 
+    response = requests.get(inf_request_api_url)
+    print(response)
+    allRequests = response.json()
+    print(allRequests)
+
     allAds = [ad for ad in allAds if ad.get('influencer_id') == current_user.id]
 
-    return render_template("influencer_pages/influencer-dashboard.html", user=current_user, allAds=allAds, allCampaigns=allCampaigns, allSponsors=allSponsors)
+    return render_template("influencer_pages/influencer-dashboard.html", user=current_user, allAds=allAds, allCampaigns=allCampaigns, allSponsors=allSponsors, allRequests=allRequests)
 
 @influencer.route("/influencer-find")
 @login_required
@@ -179,17 +185,31 @@ def request_ad(id, title, sponsor_id):
         flash("Ad request successfully sent!", category='success')
         return redirect(url_for("influencer.influencer_find"))
 
-    # response = requests.get(campaigns_api_url)
-    # allCampaigns = response.json()
-    # allCampaigns = [campaign for campaign in allCampaigns if (campaign['visibility'] == "Public") or (campaign['visibility'] == "Private" and campaign['niche'] == current_user.niche)]
-
-    # response = requests.get(influencers_api_url + f"/{id}")
-    # influencers = response.json()
-
-    # if len(allCampaigns) == 0:
-    #     flash("No campaign is available!", category='error')
-    #     return redirect(url_for("sponsor.sponsor_find"))
-
     return render_template("influencer_pages/request_ad.html", user=current_user, id=id, title=title)
     
+@influencer.route("update-request-amt/<int:id>", methods=["GET","POST"])
+def update_request_amt(id):
+    if request.method == "POST":
+        new_request_amt = request.form.get("request_amount")
+        request_ad = Influencer_requests.query.filter_by(id=id).first()
+        request_ad.request_amt = new_request_amt
+
+        db.session.add(request_ad)
+        db.session.commit()
+
+        flash("Request amount updated!", category='success')
+        return redirect(url_for("influencer.influencer_dashboard"))
+
+@influencer.route("update-ad-amt/<int:id>", methods=["GET","POST"])
+def update_ad_amt(id):
+    if request.method == "POST":
+        new_ad_amt = request.form.get("ad_amt")
+        request_ad = Ad_request.query.filter_by(id=id).first()
+        request_ad.payment_amount = new_ad_amt
+
+        db.session.add(request_ad)
+        db.session.commit()
+
+        flash("Payment amount updated!", category='success')
+        return redirect(url_for("influencer.influencer_dashboard"))
 

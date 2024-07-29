@@ -17,7 +17,7 @@
         {% set count.value = count.value + 1 %}
         {% set enterOnce.value = "True" %}
         <div class="container mt-5">
-          <h2 class="fw-bold">New Requests</h2>
+          <h3 class="fw-bold">New Requests</h3>
           <div class="table-responsive">
               <table class="table table-striped table-bordered">
                   <thead class="thead-dark">
@@ -53,7 +53,35 @@
                           </td>
                           <td>{{request.goal}}</td>
                           <td>{{request.message}}</td>
-                          <td>{{request.request_amt}}</td>
+                          <td>
+                            {{request.request_amt}} 
+                            <a href="" data-bs-toggle="modal" data-bs-target="#changeAmount-{{request.id}}">
+                              <i class="fa-solid fa-pen-to-square" style="margin-left: 7px"></i>
+                            </a>
+
+                            <div class="modal fade" id="changeAmount-{{request.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Change Amount</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form method="POST" action="update-request-amt/{{request.id}}">
+                                      <div class="mb-3">
+                                          <label for="recipient-name" class="col-form-label">New Amount:</label>
+                                          <input type="number" class="form-control" id="request_amount" name="request_amount" value="{{request.request_amt}}">
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                          <button type="submit" class="btn btn-success">Update</button>
+                                      </div>
+                                  </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
                           <td>              
                             <button class="btn text-success fw-bold" data-bs-toggle="modal" data-bs-target="#request-accept-{{request.id}}">Accept</button>
             
@@ -114,7 +142,7 @@
 <!-- Active Campaigns -->
 <div class="container mt-4">
         <div class="container mt-5">
-          <h2 class="fw-bold">Active Campaigns</h2>
+          <h3 class="fw-bold">Active Campaigns</h3>
           <div class="table-responsive">
               <table class="table table-striped table-bordered">
                   <thead class="thead-dark">
@@ -142,7 +170,36 @@
                           </td>
                           <td>{{ad.messages}}</td>
                           <td>{{ad.requirements}}</td>
-                          <td>{{ad.payment_amount}}</td>
+                          <td>
+                            {{ad.payment_amount}}
+
+                            <a href="" data-bs-toggle="modal" data-bs-target="#changeAmount-{{ad.id}}">
+                              <i class="fa-solid fa-pen-to-square" style="margin-left: 7px"></i>
+                            </a>
+
+                            <div class="modal fade" id="changeAmount-{{ad.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Change Amount</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form method="POST" action="update-ad-amt/{{ad.id}}">
+                                      <div class="mb-3">
+                                          <label for="recipient-name" class="col-form-label">New Amount:</label>
+                                          <input type="number" class="form-control" id="ad_amt" name="ad_amt" value="{{ad.payment_amount}}">
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                          <button type="submit" class="btn btn-success">Update</button>
+                                      </div>
+                                  </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
                           {% if ad.status == "Pending" %}
                             <td class="text-warning fw-bold">{{ad.status}}</td>
                           {% elif ad.status == "Rejected" %}
@@ -225,7 +282,7 @@
 <!-- Completed Campaigns -->
 <div class="container mt-4">
         <div class="container mt-5">
-          <h2 class="fw-bold">Completed Campaigns</h2>
+          <h3 class="fw-bold">Completed Campaigns</h3>
           <div class="table-responsive">
               <table class="table table-striped table-bordered">
                   <thead class="thead-dark">
