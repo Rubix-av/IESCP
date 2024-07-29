@@ -4,6 +4,8 @@ from .model import db, Campaigns, Influencers, Ad_request, Sponsors, Completed_C
 from . import niches_list
 from datetime import datetime
 import requests
+from collections import Counter
+from .chartData import count_data, sponsor_niches_data, influencer_niches_data, campaign_niches_data, ad_request_status_data, campaign_budget_data
 
 sponsor = Blueprint("sponsor", __name__)
 
@@ -75,7 +77,29 @@ def sponsor_find():
 @sponsor.route("/sponsor-stats")
 @login_required
 def sponsor_stats():
-    return render_template("sponsor_pages/sponsor-stats.html", user=current_user)
+
+    # Total users and data generated
+    get_count_data = count_data()
+    count_labels = get_count_data[0]
+    count_values = get_count_data[1]
+    total_users = get_count_data[2]
+
+    # Sponsor Niche
+    get_sponor_nice_data = sponsor_niches_data()
+    sponsor_niche_labels = get_sponor_nice_data[0]
+    sponsor_niche_values = get_sponor_nice_data[1]
+
+    # Ad request Status
+    get_ad_request_status_data = ad_request_status_data()
+    ad_request_status_labels = get_ad_request_status_data[0]
+    ad_request_status_values = get_ad_request_status_data[1]
+
+    # Campaign Budget
+    get_campaign_budget_data = campaign_budget_data(current_user.id)
+    campaign_budget_labels = get_campaign_budget_data[0]
+    campaign_budget_values = get_campaign_budget_data[1]
+
+    return render_template("sponsor_pages/sponsor-stats.html", user=current_user, ad_request_status_labels=ad_request_status_labels, ad_request_status_values=ad_request_status_values, sponsor_niche_labels=sponsor_niche_labels, sponsor_niche_values=sponsor_niche_values, campaign_budget_labels=campaign_budget_labels, campaign_budget_values=campaign_budget_values, count_labels=count_labels, values=count_values, total_users=total_users)
 
 @sponsor.route("/add-campaign", methods=["GET","POST"])
 @login_required
@@ -469,6 +493,5 @@ def update_ad_amt(id):
         return redirect(url_for("sponsor.sponsor_dashboard"))
 
     return redirect(url_for("sponsor.sponsor_profile"))
-
 
 

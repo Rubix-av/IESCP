@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from flask_login import current_user, login_required
-from .model import db, Campaigns, Influencers, Sponsors
+from .model import db, Campaigns, Influencers, Sponsors, Admins, Completed_Campaigns, Ad_request, Influencer_requests
 import requests
+from collections import Counter
+from .chartData import count_data, sponsor_niches_data, influencer_niches_data, campaign_niches_data, ad_request_status_data
 
 admin = Blueprint("admin", __name__)
 
@@ -9,6 +11,7 @@ admin = Blueprint("admin", __name__)
 campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 influencers_api_url = "http://127.0.0.1:8000/api/influencer"
 sponsors_api_url = "http://127.0.0.1:8000/api/sponsor"
+ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
 
 @admin.route("/admin-profile")
 def admin_profile():
@@ -49,7 +52,35 @@ def admin_find():
 
 @admin.route("/admin-stats")
 def admin_stats():
-    return render_template("admin_pages/admin-stats.html", user=current_user)
+
+    # Total users and data generated
+    get_count_data = count_data()
+    count_labels = get_count_data[0]
+    count_values = get_count_data[1]
+    total_users = get_count_data[2]
+
+    # Niches with the number of sponsors in it
+    get_sponor_nice_data = sponsor_niches_data()
+    sponsor_niche_labels = get_sponor_nice_data[0]
+    sponsor_niche_values = get_sponor_nice_data[1]
+
+    # Niches with the number of influencers in it
+    get_influencer_nice_data = influencer_niches_data()
+    influencer_niche_labels = get_influencer_nice_data[0]
+    influencer_niche_values = get_influencer_nice_data[1]
+
+    # Niches with the number of campaigns in it
+    get_campaign_nice_data = campaign_niches_data()
+    campaign_niche_labels = get_campaign_nice_data[0]
+    campaign_niche_values = get_campaign_nice_data[1]
+
+    # Status with the number of Ad Requests in it
+    get_ad_request_status_data = ad_request_status_data()
+    ad_request_status_labels = get_ad_request_status_data[0]
+    ad_request_status_values = get_ad_request_status_data[1]
+    
+
+    return render_template("admin_pages/admin-stats.html", user=current_user, labels=count_labels, values=count_values, total_users=total_users, sponsor_niche_labels=sponsor_niche_labels, sponsor_niche_values=sponsor_niche_values, influencer_niche_labels=influencer_niche_labels, influencer_niche_values=influencer_niche_values, campaign_niche_labels=campaign_niche_labels, campaign_niche_values=campaign_niche_values, ad_request_status_labels=ad_request_status_labels, ad_request_status_values=ad_request_status_values)
 
 @admin.route("/filter-influencers", methods=["GET","POST"])
 @login_required

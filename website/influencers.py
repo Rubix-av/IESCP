@@ -51,6 +51,8 @@ def influencer_find():
 @influencer.route("/influencer-stats")
 @login_required
 def influencer_stats():
+    
+
     return render_template("influencer_pages/influencer-stats.html", user=current_user)
 
 @influencer.route("/filter", methods=["GET","POST"])

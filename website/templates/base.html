@@ -25,10 +25,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='sponsor/sponsor-profile.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='influencer/influencer-register.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='influencer/influencer-find.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin-stats.css') }}">
 
   <!-- Bootstrap scripts -->
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <title>{% block title %}Profile{% endblock %}</title>
 </head>
