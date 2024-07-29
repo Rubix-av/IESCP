@@ -1,0 +1,197 @@
+{% extends "view.html" %} {% block title %}Profile{% endblock %}
+
+{% block view_content %}
+
+{% set count = namespace(value=0) %}
+{% set enterOnce = namespace(value="False") %}
+
+<!-- New Ad Requests -->
+<div class="container mt-4">
+
+  <!-- <div class="mt-5 d-flex align-items-center justify-content-between">
+      <h2 class="flex-shrink-0 fw-bold fs-1">
+          Active Campaigns
+      </h2>
+  </div>   -->
+
+        {% set count.value = count.value + 1 %}
+        {% set enterOnce.value = "True" %}
+        <div class="container mt-5">
+          <h2 class="fw-bold">New Requests</h2>
+          <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                  <thead class="thead-dark">
+                      <tr>
+                          <th>#</th>
+                          <th>Campaign</th>
+                          <th>Sponsor</th>
+                          <th>Message</th>
+                          <th>Requirements</th>
+                          <th>Payment (<i class="fa-solid fa-indian-rupee-sign" style="font-size: 15px;"></i>)</th>
+                          <th>Accept</th>
+                          <th>Reject</th>
+                      </tr>
+                  </thead>
+                  <tbody class="fw-bold">
+                      {% for ad in allAds %}
+                        {% if (user.id == ad.influencer_id) and (ad.status == "Pending") %}
+                      <tr>
+                          <th scope="row">{{loop.index}}</th>
+                          <td>
+                            {% for campaign in allCampaigns %}
+                              {% if campaign.id == ad.campaign_id %}
+                                {{campaign.title}}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                          <td>
+                            {% for sponsor in allSponsors %}
+                              {% if sponsor.id == ad.sponsor_id %}
+                                {{sponsor.username}}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                          <td>{{ad.messages}}</td>
+                          <td>{{ad.requirements}}</td>
+                          <td>{{ad.payment_amount}}</td>
+                          <td>              
+                            <button class="btn text-success fw-bold" data-bs-toggle="modal" data-bs-target="#ad-accept-{{ad.id}}">Accept</button>
+            
+                            <!-- Ad Accept Modal -->
+                            <div class="modal fade" id="ad-accept-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Are you sure you want to <span class="text-success fw-bold">accept</span> this <strong>Ad Request</strong>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <a href="accept-ad/{{ad.id}}" class="btn btn-success fw-bold">Accept</a>
+                                  </div>
+                                </div>
+                              </div>
+                              </div>
+                              </div>
+                              </div>
+                          </td>
+                          <td>
+                            <button class="btn text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#ad-reject-{{ad.id}}">
+                              Reject
+                            </button>
+            
+                            <!-- Ad Request Reject Modal -->
+                            <div class="modal fade" id="ad-reject-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Are you sure you want to <span class="text-danger fw-bold">reject</span> this <strong>Ad Request</strong>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <a href="reject-ad/{{ad.id}}" class="btn btn-danger fw-bold">Confirm</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>  
+                          </td>
+                      </tr>
+                        {% endif %}
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+</div>
+
+<!-- Active Campaigns -->
+<div class="container mt-4">
+
+  <!-- <div class="mt-5 d-flex align-items-center justify-content-between">
+      <h2 class="flex-shrink-0 fw-bold fs-1">
+          Active Campaigns
+      </h2>
+  </div>   -->
+
+        {% set count.value = count.value + 1 %}
+        {% set enterOnce.value = "True" %}
+        <div class="container mt-5">
+          <h2 class="fw-bold">Active Campaigns</h2>
+          <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                  <thead class="thead-dark">
+                      <tr>
+                          <th>#</th>
+                          <th>Campaign</th>
+                          <th>Sponsor</th>
+                          <th>Message</th>
+                          <th>Requirements</th>
+                          <th>Payment (<i class="fa-solid fa-indian-rupee-sign" style="font-size: 15px;"></i>)</th>
+                          <th>Finish</th>
+                      </tr>
+                  </thead>
+                  <tbody class="fw-bold">
+                      {% for ad in allAds %}
+                        {% if (user.id == ad.influencer_id) and (ad.status == "Accepted") and (ad.completed == "False") %}
+                      <tr>
+                          
+                          <th scope="row">{{loop.index}}</th>
+                          <td>
+                            {% for campaign in allCampaigns %}
+                              {% if campaign.id == ad.campaign_id %}
+                                {{campaign.title}}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                          <td>
+                            {% for sponsor in allSponsors %}
+                              {% if sponsor.id == ad.sponsor_id %}
+                                {{sponsor.username}}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                          <td>{{ad.messages}}</td>
+                          <td>{{ad.requirements}}</td>
+                          <td>{{ad.payment_amount}}</td>
+                          <td style="text-align: center;">
+                            <a href="" data-bs-toggle="modal" data-bs-target="#finalize-ad-{{ad.id}}">
+                              <i style="font-size: 25px" class="fa-regular fa-circle-check text-success fw-bold"></i>
+                            </a>
+
+                            <div class="modal fade" id="finalize-ad-{{ad.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">Warning</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Are you sure you want to <span class="text-success fw-bold">finish</span> this <strong>Active Campaign</strong>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <a href="complete-campaign/{{ad.id}}" class="btn btn-success fw-bold">Finish</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                          </td>
+                      </tr>
+                        {% endif %}
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+</div>
+
+{% endblock %}

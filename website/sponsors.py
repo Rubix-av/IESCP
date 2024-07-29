@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
-from .model import db, Campaigns, Influencers, Ad_request, Sponsors, Completed_Campaigns
+from .model import db, Campaigns, Influencers, Ad_request, Sponsors, Completed_Campaigns, Influencer_requests
 from . import niches_list
 from datetime import datetime
 import requests
@@ -12,22 +12,39 @@ campaigns_api_url = "http://127.0.0.1:8000/api/campaign"
 influencers_api_url = "http://127.0.0.1:8000/api/influencer"
 ad_request_api_url = "http://127.0.0.1:8000/api/ad_request"
 completed_campaign_api_url = "http://127.0.0.1:8000/api/completed_campaign"
+inf_request_api_url = "http://127.0.0.1:8000/api/inf_request"
 
 # Sponsor Routes
 @sponsor.route("/sponsor-profile")
 @login_required
 def sponsor_profile():
+    return render_template("sponsor_pages/sponsor-profile.html", user=current_user)
 
+@sponsor.route("/sponsor-dashboard")
+@login_required
+def sponsor_dashboard():
+
+    # Ad_requests
     response = requests.get(ad_request_api_url)
     allAds = response.json()
 
+    # Campaigns
+    response = requests.get(campaigns_api_url)
+    allCampaigns = response.json()
+
+    # Influencers
     response = requests.get(influencers_api_url)
     allInfluencers = response.json()
 
+    # Completed Campaigns
     response = requests.get(completed_campaign_api_url)
     allCompletedCampaigns = response.json()
 
-    return render_template("sponsor_pages/sponsor-profile.html", user=current_user, allAds=allAds, allInfluencers=allInfluencers, allCompletedCampaigns=allCompletedCampaigns)
+    # Influencer_requests
+    response = requests.get(inf_request_api_url)
+    allRequests = response.json()
+
+    return render_template("sponsor_pages/sponsor-dashboard.html", user=current_user, allAds=allAds, allInfluencers=allInfluencers, allCompletedCampaigns=allCompletedCampaigns, allRequests=allRequests, allCampaigns=allCampaigns)
 
 @sponsor.route("/sponsor-campaigns")
 @login_required
@@ -371,7 +388,7 @@ def confirm_completion(id):
 
     # influencer = Influencers.query.filter_by(id=ad_completion_confirmed.influencer_id).first()
     flash("Campaign successfull!", category='success')
-    return redirect(url_for("sponsor.sponsor_profile"))
+    return redirect(url_for("sponsor.sponsor_dashboard"))
 
 @sponsor.route("delete-completed-campaign/<int:id>")
 def delete_completed_campaign(id):
@@ -379,7 +396,7 @@ def delete_completed_campaign(id):
     response = requests.delete(completed_campaign_api_url + f"/{id}")
 
     flash("Successfully deleted!", category='success')
-    return redirect(url_for("sponsor.sponsor_profile"))
+    return redirect(url_for("sponsor.sponsor_dashboard"))
 
 @sponsor.route("delete-ad-request/<int:id>")
 def delete_ad_request(id):
@@ -387,7 +404,40 @@ def delete_ad_request(id):
     response = requests.delete(ad_request_api_url + f"/{id}")
 
     flash("Successfully deleted!", category='success')
-    return redirect(url_for("sponsor.sponsor_profile"))
+    return redirect(url_for("sponsor.sponsor_dashboard"))
 
+@sponsor.route("accept-request/<int:id>")
+@login_required
+def accept_request(id):
+
+    request_accepted = Influencer_requests.query.filter_by(id=id).first()
+    message = request_accepted.message
+    requirements = request_accepted.goal
+    payment_amount = request_accepted.request_amt
+    status = "Accepted"
+    campaign_id = request_accepted.campaign_id
+    influencer_id = request_accepted.influencer_id
+    sponsor_id = request_accepted.sponsor_id
+
+    new_ad_request = Ad_request(messages=message, requirements=requirements, payment_amount=payment_amount, campaign_id=campaign_id, influencer_id=influencer_id, sponsor_id=sponsor_id, status=status)
+
+    db.session.delete(request_accepted)
+    db.session.add(new_ad_request)
+    db.session.commit()
+
+    flash("Request accepted successfully", category='success')
+    return redirect(url_for("sponsor.sponsor_dashboard"))
+
+@sponsor.route("reject-request/<int:id>")
+@login_required
+def reject_request(id):
+
+    request_rejected = Influencer_requests.query.filter_by(id=id).first()
+
+    db.session.delete(request_rejected)
+    db.session.commit()
+
+    flash("Ad rejected successfully", category='success')
+    return redirect(url_for("sponsor.sponsor_dashboard"))
 
 

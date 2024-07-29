@@ -82,6 +82,22 @@ class Ad_request(db.Model, UserMixin):
 
     def get_id(self):
         return f"ad_request-{self.id}"
+    
+class Influencer_requests(db.Model, UserMixin):
+    __tablename__ = "influencer_requests"
+
+    id = db.Column(db.Integer, primary_key=True)
+    goal = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.String(100), nullable=False)
+    request_amt = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(50), default="Pending", nullable=False)
+    completed = db.Column(db.String(10), default="False", nullable=False)    
+    influencer_id = db.Column(db.Integer, db.ForeignKey("influencers.id"))
+    campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
+    sponsor_id = db.Column(db.Integer, db.ForeignKey("sponsors.id"))
+
+    def get_id(self):
+        return f"influencer_requests-{self.id}"
 
 class Completed_Campaigns(db.Model, UserMixin):
     __tablename__ = "completed_campaigns"

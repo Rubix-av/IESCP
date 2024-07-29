@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
-from .model import db, Campaigns, Ad_request
+from .model import db, Campaigns, Ad_request, Influencer_requests
 import requests
 from datetime import datetime
 
@@ -14,6 +14,11 @@ sponsor_api_url = "http://127.0.0.1:8000/api/sponsor"
 @influencer.route("/influencer-profile")
 @login_required
 def influencer_profile():
+    return render_template("influencer_pages/influencer-profile.html", user=current_user)
+
+@influencer.route("/influencer-dashboard")
+@login_required
+def influencer_dashboard():
     response = requests.get(ad_request_api_url)
     allAds = response.json()
     
@@ -25,7 +30,7 @@ def influencer_profile():
 
     allAds = [ad for ad in allAds if ad.get('influencer_id') == current_user.id]
 
-    return render_template("influencer_pages/influencer-profile.html", user=current_user, allAds=allAds, allCampaigns=allCampaigns, allSponsors=allSponsors)
+    return render_template("influencer_pages/influencer-dashboard.html", user=current_user, allAds=allAds, allCampaigns=allCampaigns, allSponsors=allSponsors)
 
 @influencer.route("/influencer-find")
 @login_required
@@ -126,7 +131,7 @@ def reject_ad(id):
     db.session.commit()
 
     flash("Ad rejected successfully", category='success')
-    return redirect(url_for("influencer.influencer_profile"))
+    return redirect(url_for("influencer.influencer_dashboard"))
     
 @influencer.route("accept-ad/<int:id>")
 @login_required
@@ -139,7 +144,7 @@ def accept_ad(id):
     db.session.commit()
 
     flash("Ad accepted successfully", category='success')
-    return redirect(url_for("influencer.influencer_profile"))
+    return redirect(url_for("influencer.influencer_dashboard"))
 
 @influencer.route("complete-campaign/<int:id>")
 @login_required
@@ -152,8 +157,39 @@ def complete_campaign(id):
     db.session.commit()
 
     flash("Campaign Completed", category='success')
-    return redirect(url_for("influencer.influencer_profile"))
+    return redirect(url_for("influencer.influencer_dashboard"))
 
+@influencer.route("request-ad/<int:id>/<string:title>/<int:sponsor_id>", methods=["GET","POST"])
+@login_required
+def request_ad(id, title, sponsor_id):
     
+    if request.method == "POST":
+        
+        goal = request.form.get("goal")
+        messages = request.form.get("message")
+        request_amt = request.form.get("request_amt")
+        campaign_id = id
+        influencer_id = current_user.id
+        sponsor_id = sponsor_id
 
+        new_request = Influencer_requests(goal=goal, message=messages, request_amt=request_amt, campaign_id=campaign_id, influencer_id=influencer_id, sponsor_id=sponsor_id)
+        db.session.add(new_request)
+        db.session.commit()
+
+        flash("Ad request successfully sent!", category='success')
+        return redirect(url_for("influencer.influencer_find"))
+
+    # response = requests.get(campaigns_api_url)
+    # allCampaigns = response.json()
+    # allCampaigns = [campaign for campaign in allCampaigns if (campaign['visibility'] == "Public") or (campaign['visibility'] == "Private" and campaign['niche'] == current_user.niche)]
+
+    # response = requests.get(influencers_api_url + f"/{id}")
+    # influencers = response.json()
+
+    # if len(allCampaigns) == 0:
+    #     flash("No campaign is available!", category='error')
+    #     return redirect(url_for("sponsor.sponsor_find"))
+
+    return render_template("influencer_pages/request_ad.html", user=current_user, id=id, title=title)
+    
 

@@ -27,20 +27,20 @@
 
 <div class="row g-4">
   {% for campaign in allCampaigns %}
-  <div class="col-sm-4 mb-5 mt-4">
+  <div class="col-sm-4 mb-4 mt-4">
     {% if loop.index > 3 %}
       <hr>
     {% endif %}
       <div class="card h-100">
           <h2 align="center" class="mt-3 fw-bold campaign-title">{{campaign.title}}</h2>
           <div class="card-body">
+              {% if campaign.visibility == "Public" %}
+              <span class="badge rounded-pill text-bg-info mb-2">{{campaign.visibility}}</span>
+              {% else %}
+              <span class="badge rounded-pill text-bg-warning mb-2">{{campaign.visibility}}</span>
+              {% endif %}
               <p>{{campaign.description}}</p>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              {% if campaign.visibility == "Public" %}
-              <span class="badge rounded-pill text-bg-info mt-2">{{campaign.visibility}}</span>
-              {% else %}
-              <span class="badge rounded-pill text-bg-warning mt-2">{{campaign.visibility}}</span>
-              {% endif %}
               <a href="campaign-view/{{campaign.id}}" class="stretched-link"></a>
           </div>
       </div>
