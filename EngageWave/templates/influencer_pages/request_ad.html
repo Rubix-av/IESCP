@@ -1,0 +1,27 @@
+{% extends "view.html" %} {% block title %}Request Ad{% endblock %}
+
+{% block view_content %}
+
+<br><h1 class="fw-bold" align="center">Requesting for <span class="text-success">{{title}}</span></h1> <br>
+
+<form method="POST" class="form-control" id="create-campaign-form">
+
+    <div class="form-floating mb-4">
+			<input type="textbox" id="goal" name="goal" placeholder="Enter Title" class="form-control">
+			<label for="goal">Goal</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="text" id="message" name="message" placeholder="Enter Title" class="form-control">
+      <label for="message">Message</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="number" id="request_amt" name="request_amt" placeholder="Enter Title" class="form-control" min="1" max="{{campaign_budget}}">
+      <label for="request_amt">Request Amount</label>
+    </div>
+    
+    <button class="btn btn-primary fw-bold" type="submit" id="login">Request</button>
+</form>
+
+{% endblock %}

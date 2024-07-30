@@ -1,0 +1,44 @@
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Adjust gap as needed */
+    padding: 20px; /* Add some padding around the flex container */
+}
+
+.profile-pic {
+    width: 500px; /* Set width */
+    height: 500px; /* Set height to maintain aspect ratio */
+    border-radius: 15%; /* Optional: for rounded corners */
+    object-fit: cover; /* Cover the container */
+    border: 2px solid #fff; /* Optional: border around the image */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+}
+
+.profile-info {
+    display: flex;
+    font-size: 40px;
+    flex-direction: column;
+    margin: 0 40px;
+    gap: 15px; /* Space between items */
+    padding: 40px; /* Padding inside profile info */
+    max-width: 100%; /* Limit the width */
+    background: #282727; /* Background color */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    color: #fff; /* Text color */
+    font-family: Arial, sans-serif; /* Font family */
+}
+
+.info-item {
+    margin-bottom: 10px; /* Space between different info items */
+}
+
+.info-label {
+    color: rgb(8, 237, 191);
+    font-weight: bold;
+}
+
+.info-value {
+    margin-left: 5px; /* Space between the label and the value */
+}

@@ -1,0 +1,235 @@
+{% extends "view.html" %} {% block title %}Stats{% endblock %}
+
+{% block view_content %}
+
+<div class="fw-bold fs-4 mt-5 mb-5" style="display: flex; justify-content: space-around; text-align: center; background-color: rgb(202, 251, 178); border-radius: 60px; padding: 15px">
+    <div>Total Sponsors <br>
+        <span>{{values[0]}}</span>
+    </div>
+</div>
+  
+<div class="topChart borderStyling mb-3">
+    <div>
+        <canvas id="barChart" width="1200" height="600"></canvas>
+    </div>
+</div>
+  
+<div class="topChart mb-2">
+    <div class="borderStyling">
+        <h3 class="fw-bold">Sponsor Niches</h3>
+        <canvas id="sponsor_niche_PieChart" width="560" height="300"></canvas>
+    </div>
+    <div class="borderStyling">
+        <h3 class="fw-bold">Campaign Budget</h3>
+        <canvas id="campaign_budget_PieChart" width="560" height="300"></canvas>
+    </div>
+</div>
+  
+<div class="topChart mb-2">
+    <div class="borderStyling">
+        <h3 class="fw-bold">Ad Requests for each Campaign</h3>
+        <canvas id="ad_request_campaign_PieChart" width="560" height="300"></canvas>
+    </div>
+</div>
+
+<!-- All User and Data Bar Chart -->
+<script>
+    var ctx = document.getElementById("barChart").getContext("2d");
+    var barChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Pending", "Accept", "Reject"],
+            datasets: [
+                {
+                    label: "Count of users and data generated",
+                    data: {{ ad_request_status_values | safe }},
+                    fill: true,
+                    backgroundColor: [
+                        "rgba(255, 206, 86, 0.2)",
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                    ],
+                    borderColor: [
+                        "rgb(255, 206, 86)",
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 22, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 18, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+            plugins: {
+            legend: {
+                display: false // Disable the legend
+            }
+        },
+            responsive: true
+        }
+    });
+</script>
+
+<!-- Sponsor Niche Pie Chart -->
+<script>
+    var ctx = document.getElementById("sponsor_niche_PieChart").getContext("2d");
+    var sponsor_niche_PieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{sponsor_niche_labels | safe}},
+            datasets: [
+                {
+                    data: {{sponsor_niche_values | safe}},
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+        }
+    });
+</script>
+
+<!-- Ad Request Campaigns Pie Chart -->
+<script>
+    var ctx = document.getElementById("ad_request_campaign_PieChart").getContext("2d");
+    var check_ad_request_campaign_PieChart = {{ ad_request_budget_values | safe }};
+
+    if (check_ad_request_campaign_PieChart.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    }
+    else{
+        var ad_request_campaign_PieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ad_request_budget_labels | safe}},
+            datasets: [
+                {
+                    data: {{ad_request_budget_values | safe}},
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+        }
+    });
+    }
+    
+</script>
+
+<!-- Campaign Budget Pie Chart -->
+<script>
+    var ctx = document.getElementById("campaign_budget_PieChart").getContext("2d");
+    var campaignEmptyValues = {{ campaign_budget_values | safe }};
+
+    if (campaignEmptyValues.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    }
+    else{
+        var campaign_budget_PieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{campaign_budget_labels | safe}},
+            datasets: [
+                {
+                    data: {{campaign_budget_values | safe}},
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+        }
+    });
+    }
+    
+</script>
+
+{% endblock %}

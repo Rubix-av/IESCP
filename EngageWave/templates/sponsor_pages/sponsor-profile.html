@@ -1,0 +1,34 @@
+{% extends "view.html" %} {% block title %}Profile{% endblock %}
+
+{% block view_content %}
+
+<div class="flex-container">
+    <div class="profile-info">
+        <div class="info-item">
+            <span class="info-label">Username:</span>
+            <span class="info-value">{{user.username}}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Niche:</span>
+            <span class="info-value">{{user.niche}}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Campaigns:</span>
+            {% if profile_campaign %}
+                <span class="info-value">{{ profile_campaign | join(', ') }}</span>
+            {% else %}
+                <span class="info-value">No campaigns</span>
+            {% endif %}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Remaining Budget:</span>
+            <span class="info-value"><i class="fa-solid fa-indian-rupee-sign" style="font-size: 33px;"></i> {{user.budget}}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{user.email}}</span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

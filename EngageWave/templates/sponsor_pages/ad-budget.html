@@ -1,0 +1,20 @@
+{% extends 'view.html' %} {% block title %}Ad Budget{% endblock %}
+
+{% block view_content %}
+
+<form method="POST" class="form-control mt-5" id="ad-budget-form">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-4 d-flex align-items-center">
+          <h4 class="fw-bold">Remaining Budget: <span class="text-success"><i class="fa-solid fa-indian-rupee-sign" style="font-size: 25px;"></i>{{campaign_budget}}</span></h4>
+        </div>
+        <div class="col-md-8">
+          <div class="form-floating">
+            <input type="number" id="payment_amount" name="payment_amount" placeholder="Enter Payment Amount" class="form-control" min="1" max="{{campaign_budget}}">
+            <label for="budget">Payment Amount</label>
+          </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit" id="login">Submit</button>
+</form>
+
+{% endblock %}

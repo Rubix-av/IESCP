@@ -1,0 +1,129 @@
+{% extends "view.html" %} {% block title %}Find{% endblock %}
+
+{% block view_content %}
+
+<!-- List of Influencers -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0 fw-bold">
+            Influencers
+        </h2>
+        <!-- create a search button  -->
+        <form action="/admin/filter-influencers" method="POST" class="flex-grow-2 ms-3">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Filter Influencers" name="filter" value="">
+            <button class="btn btn-outline-secondary fw-bold filterBtn" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% if allInfluencers|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Influencers Available</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for influencer in allInfluencers %}
+    {% if influencer.flagged == "False" %}
+        <div class="mt-2 campaign-row">
+            <span><strong>{{ influencer.username }}</strong> | {{influencer.niche}} | {{ influencer.balance }}</span>
+            <div>
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#influencer-{{influencer.id}}">View</button>
+                <div class="modal fade" id="influencer-{{influencer.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ influencer.username }}</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h5 class="fw-bold">Email</h5>
+                          {{ influencer.email }}
+                          <hr>
+                          <h5 class="fw-bold">Platform Preference</h5>
+                          {{ influencer.platform_preference }}
+                          <hr>
+                          <h5 class="fw-bold">Niche</h5>
+                          {{ influencer.niche }}
+                          <hr>
+                          <h5 class="fw-bold">Balance</h5>
+                          {{ influencer.balance }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a href="flag-influencer/{{influencer.id}}" type="button" class="btn btn-outline-danger btn-request">Block</a>
+            </div>
+        </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<!-- List of Sponsors -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0 fw-bold">
+            Sponsors
+        </h2>
+        <!-- create a search button  -->
+        <form action="/admin/filter-sponsors" method="POST" class="flex-grow-2 ms-3">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Filter Sponsors" name="filter" value="">
+            <button class="btn btn-outline-secondary fw-bold filterBtn" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% if allSponsors|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Sponsors Available</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for sponsor in allSponsors %}
+    {% if sponsor.flagged == "False" %}
+        <div class="mt-2 campaign-row">
+            <span><strong>{{ sponsor.username }}</strong> | {{ sponsor.niche }} | {{sponsor.budget}}</span>
+            <div>
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#sponsor-{{sponsor.id}}">View</button>
+                <div class="modal fade" id="sponsor-{{sponsor.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ sponsor.username }}</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h5 class="fw-bold">Email</h5>
+                          {{ sponsor.email }}
+                          <hr>
+                          <h5 class="fw-bold">Username</h5>
+                          {{ sponsor.username }}
+                          <hr>
+                          <h5 class="fw-bold">Budget</h5>
+                          {{ sponsor.budget }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a href="flag-sponsor/{{sponsor.id}}" type="button" class="btn btn-outline-danger btn-request">Block</a>
+                
+            </div>
+        </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

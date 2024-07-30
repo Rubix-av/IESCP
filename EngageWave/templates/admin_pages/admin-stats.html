@@ -1,0 +1,325 @@
+{% extends "view.html" %} {% block title %}Stats{% endblock %}
+
+{% block view_content %}
+
+<div class="fw-bold fs-4 mt-5 mb-5" style="display: flex; justify-content: space-around; text-align: center; background-color: rgb(202, 251, 178); border-radius: 60px; padding: 15px">
+    <div>Total Campaigns <br>
+        <span>{{values[-1]}}</span>
+    </div>
+    <div>Total Sponsors <br>
+        <span>{{values[0]}}</span>
+    </div>
+    <div>Total Influencers <br>
+        <span>{{values[1]}}</span>
+    </div>
+    <div>Total Users <br>
+        <span>{{total_users}}</span>
+    </div>
+</div>
+  
+<div class="topChart borderStyling mb-3">
+    <div>
+        <canvas id="barChart" width="1200" height="600"></canvas>
+    </div>
+</div>
+  
+<div class="topChart mb-2">
+    <div class="borderStyling">
+        <h3 class="fw-bold">Sponsor's Niches</h3>
+        <canvas id="sponsorPieChart" width="560" height="300"></canvas>
+    </div>
+    <div class="borderStyling">
+        <h3 class="fw-bold">Influencer's Niches</h3>
+        <canvas id="influencerPieChart" width="560" height="300"></canvas>
+    </div>
+</div>
+  
+<div class="topChart mb-2">
+    <div class="borderStyling">
+        <h3 class="fw-bold">Campaign's Niches</h3>
+        <canvas id="campaignPieChart" width="560" height="300"></canvas>
+    </div>
+    <div class="borderStyling">
+        <h3 class="fw-bold">Ad Request's Status</h3>
+        <canvas id="adRequestPieChart" width="560" height="300"></canvas>
+    </div>
+</div>
+
+<!-- All User and Data Bar Chart -->
+<script>
+    var ctx = document.getElementById("barChart").getContext("2d");
+    var barChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: {{ labels | safe }},
+            datasets: [
+                {
+                    label: "Count of users and data generated",
+                    data: {{ values | safe }},
+                    fill: true,
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)",
+                        "rgba(54, 162, 235, 0.2)",
+                        "rgba(153, 102, 255, 0.2)",
+                        "rgba(255, 159, 64, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)",
+                        "rgb(54, 162, 235)",
+                        "rgb(153, 102, 255)",
+                        "rgb(255, 159, 64)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 22, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 18, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+            plugins: {
+            legend: {
+                display: false // Disable the legend
+            }
+        },
+            responsive: false
+        }
+    });
+</script>
+
+<!-- Sponsor Pie Chart -->
+<script>
+    var ctx = document.getElementById("sponsorPieChart").getContext("2d");
+    var sponsorEmptyValues = {{ sponsor_niche_values | safe }};
+
+    if (sponsorEmptyValues.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    }
+
+    else{
+        var sponsorPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{sponsor_niche_labels | safe}},
+            datasets: [
+                {
+                    data: {{sponsor_niche_values | safe}},
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+        }
+    });
+    }
+    
+</script>
+
+<!-- Influencer Pie Chart -->
+<script>
+    var ctx = document.getElementById("influencerPieChart").getContext("2d");
+    var influencerEmptyValues = {{ influencer_niche_values | safe }};
+
+    if (influencerEmptyValues.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    }
+
+    else{
+        var influencerPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{influencer_niche_labels | safe}},
+            datasets: [
+                {
+                    data: {{influencer_niche_values | safe}},
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+        }
+    });
+    }
+
+</script>
+
+<!-- Campaign Pie Chart -->
+<script>
+    var ctx = document.getElementById("campaignPieChart").getContext("2d");
+    var campaignEmptyValues = {{ campaign_niche_values | safe }};
+
+    // Handles the case where all values are 0
+    if (campaignEmptyValues.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    }
+    else{
+        var campaignPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{campaign_niche_labels | safe}},
+            datasets: [
+                {
+                    data: {{campaign_niche_values | safe}},
+                    backgroundColor: [
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 206, 86, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(75, 192, 192)",
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 206, 86)"
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16, // Change this to your desired font size
+                            weight: 'bold' // This makes the font bold
+                        }
+                    }
+                }
+            },
+        }
+    });
+    }
+</script>
+
+<!-- Ad Request Pie Chart -->
+<script>
+    var ctx = document.getElementById("adRequestPieChart").getContext("2d");
+    var adRequestStatusValues = {{ ad_request_status_values | safe }};
+
+    function allValuesAreZero(array) {
+        return array.every(value => value === 0);
+    }
+
+    // Handles the case where all values are 0
+    if (allValuesAreZero(adRequestStatusValues)) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    } else {
+        var adRequestPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ ad_request_status_labels | safe }},
+                datasets: [
+                    {
+                        data: adRequestStatusValues,
+                        backgroundColor: [
+                            "rgba(255, 206, 86, 0.2)",
+                            "rgba(75, 192, 192, 0.2)",
+                            "rgba(255, 99, 132, 0.2)"
+                        ],
+                        borderColor: [
+                            "rgb(255, 206, 86)",
+                            "rgb(75, 192, 192)",
+                            "rgb(255, 99, 132)"
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+
+
+{% endblock %}

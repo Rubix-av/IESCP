@@ -1,0 +1,46 @@
+{% extends "view.html" %} {% block title %}Add Campaigns{% endblock %}
+
+{% block view_content %}
+<br><h1 class="fw-bold" align="center">Edit Campaigns</h1> <br>
+<form method="POST" class="form-control" id="create-campaign-form">
+
+    <div class="form-floating mb-4">
+      <input type="text" id="title" name="title" placeholder="Enter Title" class="form-control" value="{{campaign.title}}">
+      <label for="title">Title</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="text" id="description" name="description" placeholder="Enter Description" class="form-control" value="{{campaign.description}}">
+      <label for="description">Description</label>
+    </div>
+    
+    <div class="row mb-4 align-items-center">
+      <div class="col-md-4 d-flex align-items-center">
+        <h4 class="fw-bold">Remaining Budget: <span class="text-success"><i class="fa-solid fa-indian-rupee-sign" style="font-size: 25px;"></i>{{user.budget}}</span></h4>
+      </div>
+      <div class="col-md-8">
+        <div class="form-floating">
+          <input type="number" id="budget" name="budget" placeholder="Enter Budget" class="form-control" value="{{campaign.budget}}" max="{{user.budget + campaign.budget}}" min="1">
+          <label for="budget">Budget</label>
+        </div>
+      </div>
+    </div>
+
+    <select class="form-select form-floating mb-4" aria-label="Default select example" name="campaign_visibility" value="{{campaign.visibility}}" required>
+      <option value="Public" {% if campaign.visibility == 'Public' %}selected{% endif %}>Public</option>
+      <option value="Private" {% if campaign.visibility == 'Private' %}selected{% endif %}>Private</option>
+      <option disabled {% if campaign.visibility is none %}selected{% endif %}>Campaign visibility</option>
+    </select>
+      
+    <div class="form-floating mb-4">
+      <input type="date" id="startDate" name="startDate" placeholder="Enter Start Date" class="form-control" value="{{campaign.start_date}}">
+      <label for="startDate">Start Date</label>
+    </div>
+      
+    <div class="form-floating mb-4">
+      <input type="date" id="endDate" name="endDate" placeholder="Enter End Date" class="form-control" value="{{campaign.end_date}}">
+      <label for="endDate">End Date</label>
+    </div>
+    <button class="btn btn-primary" type="submit" id="login">Update</button>
+</form>
+{% endblock %}

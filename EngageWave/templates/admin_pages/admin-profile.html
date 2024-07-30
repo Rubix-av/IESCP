@@ -1,0 +1,111 @@
+{% extends "view.html" %} {% block title %}Find{% endblock %}
+
+{% block view_content %}
+
+<!-- List of Influencers -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0 fw-bold">
+           Blocked Influencers
+        </h2>
+    </div>
+
+    {% if allInfluencers|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Blocked Influencers</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for influencer in allInfluencers %}
+        <div class="mt-2 campaign-row">
+          <span><strong>{{ influencer.username }}</strong> | {{influencer.niche}} | {{ influencer.balance }}</span>
+          <div>
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#influencer-{{influencer.id}}">View</button>
+                <div class="modal fade" id="influencer-{{influencer.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ influencer.username }}</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h5 class="fw-bold">Email</h5>
+                          {{ influencer.email }}
+                          <hr>
+                          <h5 class="fw-bold">Platform Preference</h5>
+                          {{ influencer.platform_preference }}
+                          <hr>
+                          <h5 class="fw-bold">Niche</h5>
+                          {{ influencer.niche }}
+                          <hr>
+                          <h5 class="fw-bold">Balance</h5>
+                          {{ influencer.balance }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a href="unflag-influencer/{{influencer.id}}" type="button" class="btn btn-outline-danger btn-request">Unblock</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- List of Sponsors -->
+<div class="container mt-4">
+
+    <div class="mt-5 d-flex align-items-center justify-content-between">
+        <h2 class="flex-shrink-0 fw-bold">
+          Blocked Sponsors
+        </h2>
+    </div>
+
+    {% if allSponsors|length == 0 %}
+    <div class="alert alert-warning text-center fs-3 mt-4">
+      <span><strong>No Blocked Sponsors</strong></span>
+    </div>
+    {% else %}
+    {% endif %}
+
+    {% for sponsor in allSponsors %}
+        <div class="mt-2 campaign-row">
+          <span><strong>{{ sponsor.username }}</strong> | {{ sponsor.niche }} | {{sponsor.budget}}</span>
+          <div>
+                <button type="button" class="btn btn-outline-warning btn-view" data-bs-toggle="modal" data-bs-target="#sponsor-{{sponsor.id}}">View</button>
+                <div class="modal fade" id="sponsor-{{sponsor.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-width-1">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-3 fw-bold" id="staticBackdropLabel" style="font-family: Verdana, Geneva, Tahoma, sans-serif">{{ sponsor.username }}</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h5 class="fw-bold">Email</h5>
+                          {{ sponsor.email }}
+                          <hr>
+                          <h5 class="fw-bold">Username</h5>
+                          {{ sponsor.username }}
+                          <hr>
+                          <h5 class="fw-bold">Budget</h5>
+                          {{ sponsor.budget }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a href="unflag-sponsor/{{sponsor.id}}" type="button" class="btn btn-outline-danger btn-request">Unblock</a>
+                
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
