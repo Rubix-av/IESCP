@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from .model import db, Campaigns, Influencers, Sponsors, Admins, Completed_Campaigns, Ad_request, Influencer_requests
 import requests
 from collections import Counter
-from .chartData import count_data, sponsor_niches_data, influencer_niches_data, campaign_niches_data, ad_request_status_data
+from .chartData import count_data, sponsor_niches_data, influencer_niches_data, campaign_niches_data, ad_request_status_data, blocked_influencers_data, blocked_sponsors_data
 
 admin = Blueprint("admin", __name__)
 
@@ -63,27 +63,33 @@ def admin_stats():
     get_sponor_nice_data = sponsor_niches_data()
     sponsor_niche_labels = get_sponor_nice_data[0]
     sponsor_niche_values = get_sponor_nice_data[1]
-    print(sponsor_niche_values)
 
     # Niches with the number of influencers in it
     get_influencer_nice_data = influencer_niches_data()
     influencer_niche_labels = get_influencer_nice_data[0]
     influencer_niche_values = get_influencer_nice_data[1]
-    print(influencer_niche_values)
 
     # Niches with the number of campaigns in it
     get_campaign_nice_data = campaign_niches_data()
     campaign_niche_labels = get_campaign_nice_data[0]
     campaign_niche_values = get_campaign_nice_data[1]
-    print(campaign_niche_values)
 
     # Status with the number of Ad Requests in it
     get_ad_request_status_data = ad_request_status_data()
     ad_request_status_labels = get_ad_request_status_data[0]
     ad_request_status_values = get_ad_request_status_data[1]
-    print(ad_request_status_values)
 
-    return render_template("admin_pages/admin-stats.html", user=current_user, labels=count_labels, values=count_values, total_users=total_users, sponsor_niche_labels=sponsor_niche_labels, sponsor_niche_values=sponsor_niche_values, influencer_niche_labels=influencer_niche_labels, influencer_niche_values=influencer_niche_values, campaign_niche_labels=campaign_niche_labels, campaign_niche_values=campaign_niche_values, ad_request_status_labels=ad_request_status_labels, ad_request_status_values=ad_request_status_values)
+    # Number of Blocked and Unblocked Users
+    get_blocked_users_data = blocked_influencers_data()
+    blocked_influencers_labels = get_blocked_users_data[0]
+    blocked_influencers_values = get_blocked_users_data[1]
+
+    # Number of Blocked and Unblocked Influencers
+    get_blocked_sponsors_data = blocked_sponsors_data()
+    blocked_sponsors_labels = get_blocked_sponsors_data[0]
+    blocked_sponsors_values = get_blocked_sponsors_data[1]
+
+    return render_template("admin_pages/admin-stats.html", user=current_user, labels=count_labels, values=count_values, total_users=total_users, sponsor_niche_labels=sponsor_niche_labels, sponsor_niche_values=sponsor_niche_values, influencer_niche_labels=influencer_niche_labels, influencer_niche_values=influencer_niche_values, campaign_niche_labels=campaign_niche_labels, campaign_niche_values=campaign_niche_values, ad_request_status_labels=ad_request_status_labels, ad_request_status_values=ad_request_status_values, blocked_influencers_labels=blocked_influencers_labels, blocked_influencers_values=blocked_influencers_values, blocked_sponsors_labels=blocked_sponsors_labels, blocked_sponsors_values=blocked_sponsors_values)
 
 @admin.route("/filter-influencers", methods=["GET","POST"])
 @login_required
@@ -327,30 +333,6 @@ def filter_sponsors():
 
         flash(f"Could not find {filter_keyword}", category='error')
         return redirect(url_for("admin.admin_find"))
-
-@admin.route("/flag-campaign/<int:id>")
-@login_required
-def flag_campaign(id):
-
-    campaign = Campaigns.query.filter_by(id=id).first()
-    campaign.flagged = "True"
-    db.session.add(campaign)
-    db.session.commit()
-
-    flash("Campaign flagged successfully", category='success')
-    return redirect(url_for("admin.admin_find"))
-
-@admin.route("/unflag-campaign/<int:id>")
-@login_required
-def unflag_campaign(id):
-
-    campaign = Campaigns.query.filter_by(id=id).first()
-    campaign.flagged = "False"
-    db.session.add(campaign)
-    db.session.commit()
-
-    flash("Flag removed successfully", category='success')
-    return redirect(url_for("admin.admin_profile"))
 
 @admin.route("/flag-influencer/<int:id>")
 @login_required

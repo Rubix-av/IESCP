@@ -186,6 +186,56 @@ def campaigns_ad_request_data(id):
 
     return [ad_request_budget_labels, ad_request_budget_values]
 
+def blocked_influencers_data():
 
+    response = requests.get(influencers_api_url)
+    influencers = response.json()
+
+    formatted_results = []
+
+    blocked_users_data = {
+        "Blocked": 0,
+        "Unblocked": 0,
+    }
+
+    for i in influencers:
+        if i.get("flagged") == "True":
+            blocked_users_data["Blocked"] += 1
+        else:
+            blocked_users_data["Unblocked"] += 1
+
+    for (key,value) in blocked_users_data.items():
+        formatted_results.append((key,value))
+
+    blocked_influencers_labels = [row[0] for row in formatted_results]
+    blocked_influencers_values = [row[1] for row in formatted_results]
+
+    return [blocked_influencers_labels, blocked_influencers_values]
+
+def blocked_sponsors_data():
+
+    response = requests.get(sponsors_api_url)
+    sponsors = response.json()
+
+    formatted_results = []
+
+    blocked_users_data = {
+        "Blocked": 0,
+        "Unblocked": 0,
+    }
+
+    for i in sponsors:
+        if i.get("flagged") == "True":
+            blocked_users_data["Blocked"] += 1
+        else:
+            blocked_users_data["Unblocked"] += 1
+
+    for (key,value) in blocked_users_data.items():
+        formatted_results.append((key,value))
+
+    blocked_sponsors_labels = [row[0] for row in formatted_results]
+    blocked_sponsors_values = [row[1] for row in formatted_results]
+
+    return [blocked_sponsors_labels, blocked_sponsors_values]
 
 

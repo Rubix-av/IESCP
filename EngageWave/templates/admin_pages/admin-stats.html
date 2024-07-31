@@ -44,6 +44,17 @@
         <canvas id="adRequestPieChart" width="560" height="300"></canvas>
     </div>
 </div>
+  
+<div class="topChart mb-2">
+    <div class="borderStyling">
+        <h3 class="fw-bold">Blocked & Unblocked Influencers</h3>
+        <canvas id="blockedInfluencersPie" width="560" height="300"></canvas>
+    </div>
+    <div class="borderStyling">
+        <h3 class="fw-bold">Blocked & Unblocked Sponsors</h3>
+        <canvas id="blockedSponsorsPie" width="560" height="300"></canvas>
+    </div>
+</div>
 
 <!-- All User and Data Bar Chart -->
 <script>
@@ -298,6 +309,116 @@
                             "rgb(255, 206, 86)",
                             "rgb(75, 192, 192)",
                             "rgb(255, 99, 132)"
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<!-- Blocked Influencers Pie Chart -->
+<script>
+    var ctx = document.getElementById("blockedInfluencersPie").getContext("2d");
+    var blockedStatusValues = {{ blocked_influencers_values | safe }};
+
+    function allValuesAreZero(array) {
+        return array.every(value => value === 0);
+    }
+
+    // Handles the case where all values are 0
+    if (allValuesAreZero(blockedStatusValues)) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    } else {
+        var blockedInfluencersPie = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ blocked_influencers_labels | safe }},
+                datasets: [
+                    {
+                        data: blockedStatusValues,
+                        backgroundColor: [
+                            "rgba(255, 99, 132, 0.2)",
+                            "rgba(75, 192, 192, 0.2)",
+                            "rgba(255, 206, 86, 0.2)",
+                        ],
+                        borderColor: [
+                            "rgb(255, 99, 132)",
+                            "rgb(75, 192, 192)",
+                            "rgb(255, 206, 86)",
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<!-- Blocked Sponsors Pie Chart -->
+<script>
+    var ctx = document.getElementById("blockedSponsorsPie").getContext("2d");
+    var blockedStatusValues = {{ blocked_sponsors_values | safe }};
+
+    function allValuesAreZero(array) {
+        return array.every(value => value === 0);
+    }
+
+    // Handles the case where all values are 0
+    if (allValuesAreZero(blockedStatusValues)) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+    } else {
+        var blockedSponsorsPie = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ blocked_sponsors_labels | safe }},
+                datasets: [
+                    {
+                        data: blockedStatusValues,
+                        backgroundColor: [
+                            "rgba(255, 99, 132, 0.2)",
+                            "rgba(75, 192, 192, 0.2)",
+                            "rgba(255, 206, 86, 0.2)",
+                        ],
+                        borderColor: [
+                            "rgb(255, 99, 132)",
+                            "rgb(75, 192, 192)",
+                            "rgb(255, 206, 86)",
                         ],
                         borderWidth: 1
                     }
