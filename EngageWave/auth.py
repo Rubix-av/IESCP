@@ -17,7 +17,7 @@ def login():
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
         return redirect(url_for("sponsor.sponsor_profile"))
-    
+
     if request.method == "POST":
         email = request.form.get("email").lower()
         password = request.form.get("password")
@@ -60,10 +60,10 @@ def login():
             else:
                 flash("User doesn't exist!", category='error')
                 return redirect(url_for("auth.login"))
-        
+
         if rank == "2":
             sponsor = Sponsors.query.filter_by(email=email).first()
-                
+
             if sponsor:
 
                 if sponsor.flagged == "True":
@@ -94,7 +94,7 @@ def sponsor_register():
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
         return redirect(url_for("sponsors.sponsor_profile"))
-    
+
     if request.method == "POST":
         email = request.form.get("email").lower()
         username = request.form.get("username")
@@ -116,14 +116,14 @@ def sponsor_register():
             return redirect(url_for("auth.sponsor_register"))
         else:
             new_sponsor = Sponsors(email=email, username=username, niche=niche, budget=budget, password=generate_password_hash(password1))
-            
+
             db.session.add(new_sponsor)
             db.session.commit()
 
             login_user(new_sponsor, remember=True)
             flash("User created successfully", category='success')
             return redirect(url_for("sponsor.sponsor_profile"))
-            
+
 
     return render_template("sponsor_pages/sponsor-register.html", user=current_user, allNiches=niches_list)
 
@@ -134,7 +134,7 @@ def influencer_register():
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
         return redirect(url_for("influencer.influencer_profile"))
-    
+
     if request.method == "POST":
         email = request.form.get("email").lower()
         username = request.form.get("username")
@@ -151,12 +151,12 @@ def influencer_register():
         if 'image' not in request.files:
             flash("No image file provided", category='error')
             return redirect(url_for("auth.influencer_register"))
-        
+
         file = request.files['image']
         if file.filename == '':
             flash("No selected file", category='error')
             return redirect(url_for("auth.influencer_register"))
-        
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -177,14 +177,14 @@ def influencer_register():
             return redirect(url_for("auth.influencer_register"))
         else:
             new_influencer = Influencers(email=email, username=username, reach=reach, niche=niche, password=generate_password_hash(password1), platform_preference=platform_preference, image=filename)
-            
+
             db.session.add(new_influencer)
             db.session.commit()
 
             login_user(new_influencer, remember=True)
             flash("Influencer created successfully", category='success')
             return redirect(url_for("influencer.influencer_profile"))
-        
+
     return render_template("influencer_pages/influencer-register.html", user=current_user, allNiches=niches_list)
 
 # Admin Register
@@ -193,7 +193,7 @@ def admin_register():
     if current_user.is_authenticated:
         flash("You are already logged in!", category='error')
         return redirect(url_for("admin.admin_profile"))
-    
+
     if request.method == "POST":
         email = request.form.get("email").lower()
         username = request.form.get("username")
@@ -214,7 +214,7 @@ def admin_register():
             return redirect(url_for("auth.admin_register"))
         else:
             new_admin = Admins(email=email, username=username, password=generate_password_hash(password1))
-            
+
             db.session.add(new_admin)
             db.session.commit()
 
